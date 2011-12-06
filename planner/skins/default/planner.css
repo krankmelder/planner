@@ -1,0 +1,109 @@
+/*
+ * Roundcube Planner
+ */
+#taskbar a.button-planner {
+  background: url('images/planner.png') 0px 3px no-repeat;
+}
+#planner {
+  margin: 0 auto;
+  margin-top: 60px;
+  width: 900px;
+  font-family: Helvetica,Arial,"Liberation Sans","Bitstream Vera Sans",sans-serif;
+}
+#planner a {
+  text-decoration: none;
+}
+input#planner_raw {
+  padding: 5px;
+  width: 500px;
+}
+input#planner_submit {
+  padding: 5px;
+}
+
+ul#planner_controls {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+ul#planner_controls li {
+  display: inline;
+  padding: 10px 20px;
+  font-weight: bold;
+}
+#planner_help {
+  font-size: 11px;
+  display: none;
+}
+#planner_items ul {
+  margin: 10px 0;
+  padding: 0;
+}
+#planner_items li {
+  display: block;
+  list-style: none;
+  height: 20px;
+  line-height: 20px;
+  padding: 10px;
+  margin: 3px;
+  font-size: 17px;
+  background: #dfdfdf;
+  width: 700px;
+  border-radius: 5px 5px;
+  box-shadow: 0pt 1px 3px rgba(0, 0, 0, 0.1);
+}
+#planner_items li.today {
+  background: #efefef;
+}
+#planner_items li a {
+  display: block;
+  width: 15px;
+  height: 15px; 
+  margin-top: 2px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+span.date {
+  font-size: 18px;
+  position: relative;
+  left: 0px;
+  top: -7px;
+}
+span.time {
+  position: relative;
+  left: -45px;
+  top: 8px;
+  font-size: 14px;
+}
+span.datetime {
+  position: relative;
+  left: -30px;
+}
+span.nodate {
+
+}
+a.star {
+  float: left;
+  background: url('images/sprite.png') no-repeat 0px -25px;
+}
+a.nostar {
+  float: left;
+  background: url('images/sprite.png') no-repeat;
+}
+a.nostar:hover {
+  background-position: 0px -25px;
+}
+a.delete {
+  float: right;
+  background: url('images/sprite.png') no-repeat 0px -125px;
+}
+a.delete:hover {
+  background-position: 0px -100px;
+}
+a.done { 
+  float: right;
+  background: url('images/sprite.png') no-repeat 0px -75px;
+}
+a.done:hover {
+  background-position: 0px -50px;
+}

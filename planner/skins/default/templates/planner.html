@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title><roundcube:object name="pagetitle" /></title>
+  <roundcube:include file="/includes/links.html" />  
+</head>
+<body>
+  <roundcube:include file="/includes/header.html" />
+  <roundcube:include file="/includes/taskbar.html" />
+  <div id="messagetoolbar">
+    <roundcube:container name="toolbar" id="toolbar" />
+  </div>
+  <div id="planner">
+    <div id="planner_input">
+      <input id="planner_raw" type="text" autocomplete="off" />
+      <input id="planner_submit" type="submit" value="<roundcube:label name="planner.plan" />" />
+    </div>
+    <ul id="planner_controls">
+      <li><a href="#" id="all"><roundcube:label name="planner.all" /> <roundcube:object name="plugin.all" /></a></li>
+      <li><a href="#" id="starred"><roundcube:label name="planner.starred" /> <roundcube:object name="plugin.starred" /></a></li>
+      <li><a href="#" id="today"><roundcube:label name="planner.today" /> <roundcube:object name="plugin.today" /></a></li>
+      <li><a href="#" id="tomorrow"><roundcube:label name="planner.tomorrow" /> <roundcube:object name="plugin.tomorrow" /></a></li>
+      <li><a href="#" id="week"><roundcube:label name="planner.week" /> <roundcube:object name="plugin.week" /></a></li>
+      <li><a href="#" id="done"><roundcube:label name="planner.done" /></a></li>
+      <li><a href="#" id="help">?</a></li>
+    </ul>
+    <div id="planner_help">
+      To add a todo item, simply type your todo and click <roundcube:label name="planner.plan" />.
+      To add a calendar item, start with a date followed by an optional time.<br />
+      Dates can be specified with today, tomorrow or &lt;dd/mm/yyyy&gt.<br />
+      Times can be specified with &lt;hh:mm&gt; or &lt;hh&gt;h.<br />
+      (example: today 13h Lunchtime!)
+    </div>
+    <div id="planner_items"></div>
+  </div>
+</body>
+</html>
