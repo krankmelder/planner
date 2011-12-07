@@ -45,7 +45,7 @@ class planner extends rcube_plugin
     $this->add_texts('localization/', true);
 
     // register actions
-    $this->register_action('plugin.plan', array($this, 'startup'));
+    $this->register_action('plugin.planner', array($this, 'startup'));
     $this->register_action('plugin.plan_new', array($this, 'plan_new'));
     $this->register_action('plugin.plan_done', array($this, 'plan_done'));
     $this->register_action('plugin.plan_star', array($this, 'plan_star'));
