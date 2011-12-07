@@ -16,4 +16,7 @@ $labels['today'] = 'Vandaag';
 $labels['tomorrow'] = 'Morgen';
 $labels['week'] = 'Week';
 
+$labels['syntax'] = 'Syntax';
+$labels['help'] = 'Gebruik het veld hierboven om een plan toe te voegen en specificeer een "wanneer" (een datum en misschien een tijd) and "wat".
+	               Als "wanneer" leeg is zal er geen datum/tijd worden toegevoegd.';
 ?>

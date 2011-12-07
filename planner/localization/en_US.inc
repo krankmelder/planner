@@ -16,4 +16,7 @@ $labels['today'] = 'Today';
 $labels['tomorrow'] = 'Tomorrow';
 $labels['week'] = 'Week';
 
+$labels['syntax'] = 'Syntax';
+$labels['help'] = 'To add a plan use the input above and specify "when" (a date and maybe a time) and "what".
+	               If "when" is empty no date/time will be added.';
 ?>

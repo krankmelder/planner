@@ -32,8 +32,9 @@ ul#planner_controls li {
   font-weight: bold;
 }
 #planner_help {
-  font-size: 11px;
   display: none;
+  width: 500px;
+  font-size: 11px;
 }
 #planner_items ul {
   margin: 10px 0;
