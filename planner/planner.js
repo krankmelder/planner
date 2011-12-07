@@ -25,10 +25,14 @@ $(document).ready(function() {
     $(this).parent().remove();
   });
   $('a.star').live("click", function(){
-    rcmail.http_post('plugin.plan_unstar', '_id=' + $(this).parent().attr("id"));
+    if(rcmail.http_post('plugin.plan_unstar', '_id=' + $(this).parent().attr("id"))) {
+      rcmail.http_post('plugin.plan_retrieve', '_p=all');
+    }
   });
   $('a.nostar').live("click", function(){
-    rcmail.http_post('plugin.plan_star', '_id=' + $(this).parent().attr("id"));
+    if(rcmail.http_post('plugin.plan_star', '_id=' + $(this).parent().attr("id"))) {
+      rcmail.http_post('plugin.plan_retrieve', '_p=all');
+    }
   });
   $('a.delete').live("click", function(){
     rcmail.http_post('plugin.plan_delete', '_id=' + $(this).parent().attr("id"));

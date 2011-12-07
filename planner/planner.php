@@ -65,7 +65,7 @@ class planner extends rcube_plugin
       'name'    => 'planner',
       'class'   => 'button-planner',
       'label'   => 'planner.planner',
-      'href'    => './?_task=dummy&_action=plugin.plan',
+      'href'    => './?_task=dummy&_action=plugin.planner',
       'id'      => 'planner_button'
       ), 'taskbar');
       
