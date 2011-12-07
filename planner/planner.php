@@ -350,10 +350,10 @@ class planner extends rcube_plugin
 	  }
       // starred plan
       if($plan['starred']) {
-          $html.= "<a class=\"star\"></a>";
+          $html.= "<a class=\"star\" title=\"" . $this->getText('unmark') . "\"></a>";
       }
       else {
-          $html.= "<a class=\"nostar\"></a>";
+          $html.= "<a class=\"nostar\" title=\"" . $this->getText('mark') . "\"></a>";
       }
       // plan with date/time
       if(!empty($plan['datetime'])) {
@@ -367,11 +367,11 @@ class planner extends rcube_plugin
       }
 	// finished plan
       if($done) {
-        $html.= "<a class=\"delete\" href=\"#\"></a>";
+        $html.= "<a class=\"delete\" href=\"#\" title=\"" . $this->getText('delete') . "\"></a>";
       }
 	  // not finished plan
       else {
-        $html.= "<a class=\"done\" href=\"#\"></a>";
+        $html.= "<a class=\"done\" href=\"#\" title=\"" . $this->getText('done') . "\"></a>";
       }
       $html.= "</li>";
     }
