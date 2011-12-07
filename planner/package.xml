@@ -7,7 +7,9 @@
     <channel></channel>
     <summary>A planner for Roundcube</summary>
     <description>
-    A hybrid between a todo-list and a calendar for Roundcube.
+    Planner is a task-management plugin for Roundcube.
+    A hybrid between a todo-list and a calendar.
+    (https://github.com/roundcube-planner/roundcube-planner)
     </description>
     <lead>
         <name>Lazlo Westerhof</name>
