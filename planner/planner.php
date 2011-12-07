@@ -27,10 +27,8 @@
 /**
  * Roundcube Planner plugin
  *
- * Plugin that adds a hybrid between a 
- * todo-listand a calendar to Roundcube.
- *
- * @author Lazlo Westerhof
+ * Planner is a task-management plugin for Roundcube.
+ * A hybrid between a todo-list and a calendar.
  */
 class planner extends rcube_plugin
 {
@@ -47,13 +45,13 @@ class planner extends rcube_plugin
     $this->add_texts('localization/', true);
 
     // register actions
-    $this->register_action('plugin.planner', array($this, 'startup'));
-    $this->register_action('plugin.planner_new', array($this, 'planner_new'));
-    $this->register_action('plugin.planner_done', array($this, 'planner_done'));
-    $this->register_action('plugin.planner_star', array($this, 'planner_star'));
-    $this->register_action('plugin.planner_unstar', array($this, 'planner_unstar'));
-    $this->register_action('plugin.planner_delete', array($this, 'planner_delete'));
-    $this->register_action('plugin.planner_retrieve', array($this, 'planner_retrieve'));
+    $this->register_action('plugin.plan', array($this, 'startup'));
+    $this->register_action('plugin.plan_new', array($this, 'plan_new'));
+    $this->register_action('plugin.plan_done', array($this, 'plan_done'));
+    $this->register_action('plugin.plan_star', array($this, 'plan_star'));
+    $this->register_action('plugin.plan_unstar', array($this, 'plan_unstar'));
+    $this->register_action('plugin.plan_delete', array($this, 'plan_delete'));
+    $this->register_action('plugin.plan_retrieve', array($this, 'plan_retrieve'));
 
     // register handlers
     $this->register_handler('plugin.all', array($this, '(10)'));
@@ -67,7 +65,7 @@ class planner extends rcube_plugin
       'name'    => 'planner',
       'class'   => 'button-planner',
       'label'   => 'planner.planner',
-      'href'    => './?_task=dummy&_action=plugin.planner',
+      'href'    => './?_task=dummy&_action=plugin.plan',
       'id'      => 'planner_button'
       ), 'taskbar');
       
@@ -94,9 +92,9 @@ class planner extends rcube_plugin
   }
    
   /**
-   * Create new planner item
+   * Create new plan
    */
-  function planner_new() {
+  function plan_new() {
     if (!empty($this->user)) {
       $raw = get_input_value('_p', RCUBE_INPUT_POST);
       $formatted = $this->rawToFormatted($raw);
@@ -119,9 +117,9 @@ class planner extends rcube_plugin
   }
 
   /**
-   * Mark planner item done
+   * Mark plan done
    */
-  function planner_done() {
+  function plan_done() {
     if (!empty($this->user)) {
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
@@ -133,9 +131,9 @@ class planner extends rcube_plugin
   }
 
   /**
-   * Mark planner item starred
+   * Mark plan starred
    */
-  function planner_star() {
+  function plan_star() {
     if (!empty($this->user)) {
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
@@ -147,9 +145,9 @@ class planner extends rcube_plugin
   }
 
   /**
-   * Unmark starred planner item
+   * Unmark starred plan
    */
-  function planner_unstar() {
+  function plan_unstar() {
     if (!empty($this->user)) {
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
@@ -161,10 +159,9 @@ class planner extends rcube_plugin
   }
 
   /**
-   * Delete a planner item
-   *
+   * Delete a plan
    */
-  function planner_delete() {
+  function plan_delete() {
     if (!empty($this->user)) {
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
@@ -176,9 +173,9 @@ class planner extends rcube_plugin
   }
 
   /**
-   * Retrieve planner items and output as html
+   * Retrieve plans and output as html
    */
-  function planner_retrieve() {
+  function plan_retrieve() {
     if (!empty($this->user)) {
       $done = false;
       switch(get_input_value('_p', RCUBE_INPUT_POST)) {
@@ -240,17 +237,17 @@ class planner extends rcube_plugin
                                          );
           break;
       }
-      // send planner items to client
-      $this->rc->output->command('plugin.planner_retrieve', $this->html($result, $done));
+      // send plans to client
+      $this->rc->output->command('plugin.plan_retrieve', $this->html($result, $done));
     }
   }
 
   /**
-   * Convert raw planner item to formatted item with seperated date, time and text.
+   * Convert raw plan to formatted item with seperated date, time and text.
    * Returns formatted array if it is an item with a datetime.
    * Returns false if it is a text-only item.
    *
-   * @param  raw       Raw planner item
+   * @param  raw       Raw plan
    * @return array     Formatted item with seperated date/time
    */
   private function rawToFormatted($raw) {
@@ -312,11 +309,11 @@ class planner extends rcube_plugin
   }
 
   /**
-   * Convert raw a possible planner item time to formatted item time.
+   * Convert raw a possible plan time to formatted item time.
    * Defaults to 08:00 if no time could be matched.
    *
    * @param  raw       Possible raw planner itme time
-   * @return string    Formatted planner item time
+   * @return string    Formatted plan time
    */
   private function matchTime($raw) {
     // match hh:mm
@@ -334,15 +331,15 @@ class planner extends rcube_plugin
   }
 
   /**
-   * Convert planner items retrieved from database to formatted html.
+   * Convert plans retrieved from database to formatted html.
    *
-   * @param  result    Results from planner item retrieval from database
-   * @param  done      Is planner item done?
+   * @param  result    Results from plan retrieval from database
+   * @param  done      Is plan done?
    * @return string    Formatted planner as html
    */
   private function html($result, $done) {
     $html = "<ul>";
-    // loop over all planner items retrieved
+    // loop over all plans retrieved
     while ($result && ($plan = $this->rc->db->fetch_assoc($result))) {
 	  if(date('Ymd', $plan['timestamp']) === date('Ymd')) {
 		 $html.= "<li id=\"" . $plan['id'] . "\" class=\"today\">";
@@ -357,21 +354,21 @@ class planner extends rcube_plugin
       else {
           $html.= "<a class=\"nostar\"></a>";
       }
-      // planner item with date/time
+      // plan with date/time
       if(!empty($plan['datetime'])) {
           $html.= "<span class=\"date\">" . date('d M', $plan['timestamp']) . "</span>";
           $html.= "<span class=\"time\">" . date('H:i', $plan['timestamp']) . "</span>";
           $html.= "<span class=\"datetime\">" . $plan['text'] . "</span>";
       }
-      // planner item without date/time
+      // plan without date/time
       else {
           $html.= "<span class=\"nodate\">" . $plan['text'] . "</span>";
       }
-	// finished planner item
+	// finished plan
       if($done) {
         $html.= "<a class=\"delete\" href=\"#\"></a>";
       }
-	  // not finished planner item
+	  // not finished plan
       else {
         $html.= "<a class=\"done\" href=\"#\"></a>";
       }
