@@ -181,7 +181,7 @@ class planner extends rcube_plugin
       switch(get_input_value('_p', RCUBE_INPUT_POST)) {
         // retrieve all
         case "all":
-          $result = $this->rc->db->query("SELECT *, UNIX_TIMESTAMP(datetime) AS timestamp FROM planner
+          $result = $this->rc->db->query("SELECT * FROM planner
                                           WHERE user_id=? AND done =? AND deleted =?
                                           ORDER BY `datetime` ASC",
                                           $this->rc->user->ID, 0, 0
@@ -189,7 +189,7 @@ class planner extends rcube_plugin
           break;
         // retrieve starred
         case "starred":
-          $result = $this->rc->db->query("SELECT *, UNIX_TIMESTAMP(datetime) AS timestamp FROM planner
+          $result = $this->rc->db->query("SELECT * FROM planner
                                           WHERE user_id=? AND done =? AND deleted =? AND starred =?
                                           ORDER BY `datetime` ASC",
                                           $this->rc->user->ID, 0, 0, 1
@@ -197,7 +197,7 @@ class planner extends rcube_plugin
           break;
         // retrieve today's
         case "today":
-          $result = $this->rc->db->query("SELECT *, UNIX_TIMESTAMP(datetime) AS timestamp FROM planner
+          $result = $this->rc->db->query("SELECT * FROM planner
                                           WHERE user_id=? AND done =? AND deleted =? AND DATE(datetime) = DATE(NOW())
                                           ORDER BY `datetime` ASC",
                                           $this->rc->user->ID, 0, 0
@@ -205,7 +205,7 @@ class planner extends rcube_plugin
           break;
         // retrieve tomorrow's
         case "tomorrow":
-          $result = $this->rc->db->query("SELECT *, UNIX_TIMESTAMP(datetime) AS timestamp FROM planner
+          $result = $this->rc->db->query("SELECT * FROM planner
                                           WHERE user_id=? AND done =? AND deleted =? AND TO_DAYS(datetime) = TO_DAYS(NOW())+1
                                           ORDER BY `datetime` ASC",
                                           $this->rc->user->ID, 0, 0
@@ -213,7 +213,7 @@ class planner extends rcube_plugin
           break;
         // retrieve this week
         case "week":
-          $result = $this->rc->db->query("SELECT *, UNIX_TIMESTAMP(datetime) AS timestamp FROM planner
+          $result = $this->rc->db->query("SELECT * FROM planner
                                           WHERE user_id=? AND done =? AND deleted =? AND WEEK(datetime) = WEEK(NOW())
                                           ORDER BY `datetime` ASC",
                                           $this->rc->user->ID, 0, 0
@@ -221,7 +221,7 @@ class planner extends rcube_plugin
           break;
         // retrieve done
         case "done":
-          $result = $this->rc->db->query("SELECT *, UNIX_TIMESTAMP(datetime) AS timestamp FROM planner
+          $result = $this->rc->db->query("SELECT * FROM planner
                                           WHERE user_id=? AND deleted =? AND done =?
                                           ORDER BY `datetime` ASC",
                                           $this->rc->user->ID, 0, 1
@@ -230,7 +230,7 @@ class planner extends rcube_plugin
           break;
         // retrieve all
         default:
-          $result = $this->rc->db->query("SELECT *, UNIX_TIMESTAMP(datetime) AS timestamp FROM planner
+          $result = $this->rc->db->query("SELECT * FROM planner
                                           WHERE user_id=? AND deleted =?
                                           ORDER BY `datetime` ASC",
                                           $this->rc->user->ID, 0
@@ -341,7 +341,8 @@ class planner extends rcube_plugin
     $html = "<ul>";
     // loop over all plans retrieved
     while ($result && ($plan = $this->rc->db->fetch_assoc($result))) {
-	  if(date('Ymd', $plan['timestamp']) === date('Ymd')) {
+	  $timestamp = strtotime($plan['datetime']);
+	  if(date('Ymd', $timestamp) === date('Ymd')) {
 		 $html.= "<li id=\"" . $plan['id'] . "\" class=\"today\">";
 	  }
 	  else {
@@ -356,8 +357,8 @@ class planner extends rcube_plugin
       }
       // plan with date/time
       if(!empty($plan['datetime'])) {
-          $html.= "<span class=\"date\">" . date('d M', $plan['timestamp']) . "</span>";
-          $html.= "<span class=\"time\">" . date('H:i', $plan['timestamp']) . "</span>";
+          $html.= "<span class=\"date\">" . date('d M', $timestamp) . "</span>";
+          $html.= "<span class=\"time\">" . date('H:i', $timestamp) . "</span>";
           $html.= "<span class=\"datetime\">" . $plan['text'] . "</span>";
       }
       // plan without date/time

@@ -1,3 +1,4 @@
+-- Table structure for table `planner`
 CREATE TABLE planner (
   id integer NOT NULL PRIMARY KEY,
   user_id integer NOT NULL default '0',
