@@ -14,9 +14,10 @@ $(document).ready(function() {
 
   // listeners
   $('#planner_submit').click(function() {
-    rcmail.http_post('plugin.planner_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
-    $('#planner_raw').val("");
-    rcmail.http_post('plugin.planner_retrieve', '_p=all');
+    if(rcmail.http_post('plugin.planner_new', '_p=' + encodeURIComponent($('#planner_raw').val()))) {
+      $('#planner_raw').val("");
+      rcmail.http_post('plugin.planner_retrieve', '_p=all');
+    }
   });
   // use .on() for jQuery 1.7+
   $("a.done").live("click", function(){
