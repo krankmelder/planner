@@ -4,12 +4,14 @@
  * @author Lazlo Westerhof
  */
 $(document).ready(function() {
+  var list = 'all';
+
   // add event listeners
   rcmail.addEventListener('plugin.plan_retrieve', function(response) {
     $('#planner_items').html(response);
   });
   rcmail.addEventListener('plugin.plan_reload', function(response) {
-    rcmail.http_post('plugin.plan_retrieve', '_p=all');
+    rcmail.http_post('plugin.plan_retrieve', '_p=' + list);
   });
 
   // load plans
@@ -38,21 +40,27 @@ $(document).ready(function() {
 
   $('#all').click(function() {
     rcmail.http_post('plugin.plan_retrieve', '_p=all');
+    list = 'all';
   });
   $('#starred').click(function() {
     rcmail.http_post('plugin.plan_retrieve', '_p=starred');
+    list = 'starred';
   });
   $('#today').click(function() {
     rcmail.http_post('plugin.plan_retrieve', '_p=today');
+    list = 'today';
   });
   $('#tomorrow').click(function() {
     rcmail.http_post('plugin.plan_retrieve', '_p=tomorrow');
+    list = 'tomorrow';
   });
   $('#week').click(function() {
     rcmail.http_post('plugin.plan_retrieve', '_p=week');
+    list = 'week';
   });
   $('#done').click(function() {
     rcmail.http_post('plugin.plan_retrieve', '_p=done');
+    list = 'done';
   });
   
   // help
