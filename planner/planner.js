@@ -16,6 +16,7 @@ $(document).ready(function() {
 
   // load plans
   rcmail.http_post('plugin.plan_retrieve', '_p=all');
+  $('#all').toggleClass("active");
 
   // listeners
   $('#planner_submit').click(function() {
@@ -37,34 +38,39 @@ $(document).ready(function() {
     rcmail.http_post('plugin.plan_delete', '_id=' + $(this).parent().attr("id"));
     $(this).parent().remove();
   });
-
   $('#all').click(function() {
     rcmail.http_post('plugin.plan_retrieve', '_p=all');
-    list = 'all';
+    setActive('all');
   });
   $('#starred').click(function() {
     rcmail.http_post('plugin.plan_retrieve', '_p=starred');
-    list = 'starred';
+    setActive('starred');
   });
   $('#today').click(function() {
     rcmail.http_post('plugin.plan_retrieve', '_p=today');
-    list = 'today';
+    setActive('today');
   });
   $('#tomorrow').click(function() {
     rcmail.http_post('plugin.plan_retrieve', '_p=tomorrow');
-    list = 'tomorrow';
+    setActive('tomorrow');
   });
   $('#week').click(function() {
     rcmail.http_post('plugin.plan_retrieve', '_p=week');
-    list = 'week';
+    setActive('week');
   });
   $('#done').click(function() {
     rcmail.http_post('plugin.plan_retrieve', '_p=done');
-    list = 'done';
+    setActive('done');
   });
   
   // help
   $("#help").click(function () {
-      $("#planner_help").slideToggle("slow");
+    $("#planner_help").slideToggle("slow");
+    $(this).toggleClass("active");
   });
+  
+  function setActive(id) {
+    $('#' + list).toggleClass("active");
+    list = id;
+    $('#' + id).toggleClass("active");  }
 });

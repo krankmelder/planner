@@ -15,7 +15,7 @@
   color: #dddddd;
   text-decoration: none;
 }
-#planner a:hover {
+#planner a:hover, #planner .active {
   color: #ffffff;
 }
 #planner_input {
