@@ -105,7 +105,6 @@ class planner extends rcube_plugin
         $datetime,
         trim($formatted['text'])
       );
-      $this->rc->db->insert_id('planner');
     }
   }
 
