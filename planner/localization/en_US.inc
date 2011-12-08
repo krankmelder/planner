@@ -17,6 +17,13 @@ $labels['today'] = 'Today';
 $labels['tomorrow'] = 'Tomorrow';
 $labels['week'] = 'Week';
 
+$labels['show_all'] = 'Show all plans';
+$labels['show_starred'] = 'Show starred plans';
+$labels['show_today'] = 'Show today\'s plans';
+$labels['show_tomorrow'] = 'Show tomorrow\'s plans';
+$labels['show_week'] = 'Show week plans';
+$labels['show_done'] = 'Show done plans';
+
 $labels['help'] = 'Help';
 $labels['syntax'] = 'Syntax';
 $labels['help_text'] = 'To add a plan use the input above and specify "when" (a date and maybe a time) and "what".

@@ -17,6 +17,13 @@ $labels['today'] = 'Vandaag';
 $labels['tomorrow'] = 'Morgen';
 $labels['week'] = 'Week';
 
+$labels['show_all'] = 'Laat alle planns zien';
+$labels['show_starred'] = 'Laat alle gemarkeerde plannen zien';
+$labels['show_today'] = 'Laat plannen voor vandaag zien';
+$labels['show_tomorrow'] = 'Laat plannen voor morgen zien';
+$labels['show_week'] = 'Laat plannen voor deze week zien';
+$labels['show_done'] = 'Laat afgeronde plannen zien';
+
 $labels['help'] = 'Help';
 $labels['syntax'] = 'Syntax';
 $labels['help_text'] = 'Gebruik het veld hierboven om een plan toe te voegen en specificeer een "wanneer" (een datum en misschien een tijd) and "wat".

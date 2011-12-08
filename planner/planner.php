@@ -53,13 +53,6 @@ class planner extends rcube_plugin
     $this->register_action('plugin.plan_delete', array($this, 'plan_delete'));
     $this->register_action('plugin.plan_retrieve', array($this, 'plan_retrieve'));
 
-    // register handlers
-    $this->register_handler('plugin.all', array($this, '(10)'));
-    $this->register_handler('plugin.starred', array($this, ''));
-    $this->register_handler('plugin.today', array($this, '(8)'));
-    $this->register_handler('plugin.tomorrow', array($this, ''));
-    $this->register_handler('plugin.week', array($this, '(8)'));
-
     // add planner button to taskbar
     $this->add_button(array(
       'name'    => 'planner',
