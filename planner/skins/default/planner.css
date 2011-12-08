@@ -115,9 +115,6 @@ span.datetime {
   position: relative;
   left: -30px;
 }
-span.nodate {
-
-}
 a.star {
   float: left;
   background: url('images/sprite.png') no-repeat 0px -25px;

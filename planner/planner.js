@@ -72,5 +72,6 @@ $(document).ready(function() {
   function setActive(id) {
     $('#' + list).toggleClass("active");
     list = id;
-    $('#' + id).toggleClass("active");  }
+    $('#' + id).toggleClass("active");
+  }
 });

@@ -285,7 +285,7 @@ class planner extends rcube_plugin
         return $formatted;
     }
     // dd/mm/yyyy
-    elseif(preg_match('/(0[1-9]|[12][0-9]|3[01])[\.\-\/](0[1-9]|1[012])[\.\-\/](20)\d\d/', $split['0'], $matches)) {
+    elseif(preg_match('/(0[1-9]|[12][0-9]|3[01])[\.\-\/](0[1-9]|1[012])[\.\-\/]((20)[0-9][0-9])/', $split['0'], $matches)) {
         if($this->matchTime($split['1'])) {
             $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, $matches['2'], $matches['1'], $matches['3'])) . $this->matchTime($split['1']);
             $formatted['text'] = $split['2'];
@@ -295,7 +295,7 @@ class planner extends rcube_plugin
             $formatted['text'] = $split['1']. " " .$split['2'];
         }
         return $formatted;
-    }
+	}
     else {
         $formatted['text'] = $raw;
         return $formatted;
