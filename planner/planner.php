@@ -296,6 +296,18 @@ class planner extends rcube_plugin
         }
         return $formatted;
 	}
+    // dd/mm
+    elseif(preg_match('/(0[1-9]|[12][0-9]|3[01])[\.\-\/](0[1-9]|1[012])/', $split['0'], $matches)) {
+        if($this->matchTime($split['1'])) {
+            $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, $matches['2'], $matches['1'], date('Y'))) . $this->matchTime($split['1']);
+            $formatted['text'] = $split['2'];
+        }
+        else {
+            $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, $matches['2'], $matches['1'], date('Y'))) . "08:00:00";
+            $formatted['text'] = $split['1']. " " .$split['2'];
+        }
+        return $formatted;
+	}
     else {
         $formatted['text'] = $raw;
         return $formatted;
