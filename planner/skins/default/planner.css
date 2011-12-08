@@ -7,29 +7,54 @@
 #planner {
   margin: 0 auto;
   margin-top: 60px;
-  width: 900px;
+  width: 800px;
   font-family: Helvetica,Arial,"Liberation Sans","Bitstream Vera Sans",sans-serif;
 }
 #planner a {
   text-decoration: none;
 }
+#planner_input {
+  height: 60px;
+}
 input#planner_raw {
   padding: 5px;
+  padding: 9px;  
+  border: solid 1px #e5e5e5;  
+  outline: 0;  
+  font: normal 13px/100% Verdana, Tahoma, sans-serif;  
   width: 500px;
+  background: #ffffff;
+  box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
 }
+input#planner_raw:hover, input#planner_raw:focus {  
+  border-color: #c9c9c9;  
+}  
 input#planner_submit {
-  padding: 5px;
+  width: auto;  
+  padding: 8px 15px;  
+  margin-bottom: 12px;
+  background: #127fbe;  
+  border: 0;  
+  font-weight: bold;
+  font-size: 14px;
+  color: #ffffff;
 }
 
 ul#planner_controls {
   display: inline;
-  margin: 0;
-  padding: 0;
+  padding: 5px 0;
+  background: #dfdfdf;
+  width: 700px;
+  border-radius: 5px 5px;
+  box-shadow: 0pt 1px 3px rgba(0, 0, 0, 0.1);
 }
 ul#planner_controls li {
   display: inline;
   padding: 10px 20px;
   font-weight: bold;
+}
+ul#planner_controls li a:hover {
+  color: #555555;
 }
 #planner_help {
   display: none;
@@ -37,7 +62,7 @@ ul#planner_controls li {
   font-size: 11px;
 }
 #planner_items ul {
-  margin: 10px 0;
+  margin: 20px 0;
   padding: 0;
 }
 #planner_items li {
