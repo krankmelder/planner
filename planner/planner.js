@@ -8,16 +8,17 @@ $(document).ready(function() {
   rcmail.addEventListener('plugin.plan_retrieve', function(response) {
     $('#planner_items').html(response);
   });
+  rcmail.addEventListener('plugin.plan_reload', function(response) {
+    rcmail.http_post('plugin.plan_retrieve', '_p=all');
+  });
 
   // load plans
   rcmail.http_post('plugin.plan_retrieve', '_p=all');
 
   // listeners
   $('#planner_submit').click(function() {
-    if(rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()))) {
-      $('#planner_raw').val("");
-      rcmail.http_post('plugin.plan_retrieve', '_p=all');
-    }
+    rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
+    $('#planner_raw').val("");
   });
   // use .on() for jQuery 1.7+
   $("a.done").live("click", function(){
@@ -25,14 +26,10 @@ $(document).ready(function() {
     $(this).parent().remove();
   });
   $('a.star').live("click", function(){
-    if(rcmail.http_post('plugin.plan_unstar', '_id=' + $(this).parent().attr("id"))) {
-      rcmail.http_post('plugin.plan_retrieve', '_p=all');
-    }
+    rcmail.http_post('plugin.plan_unstar', '_id=' + $(this).parent().attr("id"));
   });
   $('a.nostar').live("click", function(){
-    if(rcmail.http_post('plugin.plan_star', '_id=' + $(this).parent().attr("id"))) {
-      rcmail.http_post('plugin.plan_retrieve', '_p=all');
-    }
+    rcmail.http_post('plugin.plan_star', '_id=' + $(this).parent().attr("id"));
   });
   $('a.delete').live("click", function(){
     rcmail.http_post('plugin.plan_delete', '_id=' + $(this).parent().attr("id"));

@@ -105,6 +105,7 @@ class planner extends rcube_plugin
         $datetime,
         trim($formatted['text'])
       );
+      $this->rc->output->command('plugin.plan_reload', array());
     }
   }
 
@@ -133,6 +134,7 @@ class planner extends rcube_plugin
         "UPDATE planner SET starred=? WHERE id=?",
         1, $id
       );
+      $this->rc->output->command('plugin.plan_reload', array());
     }
   }
 
@@ -147,6 +149,7 @@ class planner extends rcube_plugin
         "UPDATE planner SET starred=? WHERE id=?",
         0, $id
       );
+      $this->rc->output->command('plugin.plan_reload', array());
     }
   }
 
