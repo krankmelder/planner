@@ -50,8 +50,10 @@ class planner extends rcube_plugin
     $this->register_action('plugin.plan_done', array($this, 'plan_done'));
     $this->register_action('plugin.plan_star', array($this, 'plan_star'));
     $this->register_action('plugin.plan_unstar', array($this, 'plan_unstar'));
+    $this->register_action('plugin.plan_edit', array($this, 'plan_edit'));
     $this->register_action('plugin.plan_delete', array($this, 'plan_delete'));
     $this->register_action('plugin.plan_retrieve', array($this, 'plan_retrieve'));
+    $this->register_action('plugin.plan_raw', array($this, 'plan_raw'));
 
     // add planner button to taskbar
     $this->add_button(array(
@@ -154,6 +156,30 @@ class planner extends rcube_plugin
   }
 
   /**
+   * Edit a plan
+   */
+  function plan_edit() {
+    if (!empty($this->user)) {
+      $id = get_input_value('_id', RCUBE_INPUT_POST);
+      $raw = get_input_value('_p', RCUBE_INPUT_POST);
+
+      $formatted = $this->rawToFormatted($raw);
+      
+      $datetime = null;
+      if(!empty($formatted['datetime'])) {
+        $datetime = date( 'Y-m-d H:i:s', strtotime($formatted['datetime']));
+      }
+      $query = $this->rc->db->query(
+        "UPDATE planner SET datetime=?, text=? WHERE id=?",
+        $datetime,
+        trim($formatted['text']),
+        $id
+      );
+      $this->rc->output->command('plugin.plan_reload', array());
+    }
+  }
+  
+  /**
    * Delete a plan
    */
   function plan_delete() {
@@ -234,6 +260,30 @@ class planner extends rcube_plugin
       }
       // send plans to client
       $this->rc->output->command('plugin.plan_retrieve', $this->html($result, $done));
+    }
+  }
+  
+  /**
+   * Retrieve a plan in raw format for editing
+   */
+  function plan_raw() {
+    if (!empty($this->user)) {
+      $id = get_input_value('_id', RCUBE_INPUT_POST);
+
+      $result = $this->rc->db->query("SELECT * FROM planner
+                                      WHERE id=? AND user_id=?",
+                                      $id, $this->rc->user->ID, 0, 0
+                                     );
+                                     
+      $plan = $this->rc->db->fetch_assoc($result);
+      
+	  $raw = $plan['text'];
+      if(!empty($plan['datetime'])) {
+		$raw = date('d/m/Y H:i', strtotime($plan['datetime'])) . " " . $plan['text'];
+	  }
+	  
+	  $response = array('id' => $id, 'raw' => $raw);
+      $this->rc->output->command('plugin.plan_edit', $response);
     }
   }
 
@@ -362,6 +412,7 @@ class planner extends rcube_plugin
       else {
           $html.= "<a class=\"nostar\" title=\"" . $this->getText('mark') . "\"></a>";
       }
+      $html.= "<span class=\"edit\">";
       // plan with date/time
       if(!empty($plan['datetime'])) {
           $html.= "<span class=\"date\">" . date('d M', $timestamp) . "</span>";
@@ -372,6 +423,7 @@ class planner extends rcube_plugin
       else {
           $html.= "<span class=\"nodate\">" . $plan['text'] . "</span>";
       }
+      $html.= "</span>";
 	// finished plan
       if($done) {
         $html.= "<a class=\"delete\" href=\"#\" title=\"" . $this->getText('delete') . "\"></a>";
