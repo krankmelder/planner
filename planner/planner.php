@@ -119,8 +119,8 @@ class planner extends rcube_plugin
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
       $query = $this->rc->db->query(
-        "UPDATE planner SET done=? WHERE id=?",
-        1, $id
+        "UPDATE planner SET done=? WHERE id=? AND user_id=?",
+        1, $id, $this->user
       );
     }
   }
@@ -133,8 +133,8 @@ class planner extends rcube_plugin
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
       $query = $this->rc->db->query(
-        "UPDATE planner SET starred=? WHERE id=?",
-        1, $id
+        "UPDATE planner SET starred=? WHERE id=? AND user_id=?",
+        1, $id, $this->user
       );
       $this->rc->output->command('plugin.plan_reload', array());
     }
@@ -148,8 +148,8 @@ class planner extends rcube_plugin
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
       $query = $this->rc->db->query(
-        "UPDATE planner SET starred=? WHERE id=?",
-        0, $id
+        "UPDATE planner SET starred=? WHERE id=? AND user_id=?",
+        0, $id, $this->user
       );
       $this->rc->output->command('plugin.plan_reload', array());
     }
@@ -170,10 +170,11 @@ class planner extends rcube_plugin
         $datetime = date( 'Y-m-d H:i:s', strtotime($formatted['datetime']));
       }
       $query = $this->rc->db->query(
-        "UPDATE planner SET datetime=?, text=? WHERE id=?",
+        "UPDATE planner SET datetime=?, text=? WHERE id=? AND user_id=?",
         $datetime,
         trim($formatted['text']),
-        $id
+        $id,
+        $this->user
       );
       $this->rc->output->command('plugin.plan_reload', array());
     }
@@ -187,8 +188,8 @@ class planner extends rcube_plugin
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
       $query = $this->rc->db->query(
-        "UPDATE planner SET deleted=? WHERE id=?",
-        1, $id
+        "UPDATE planner SET deleted=? WHERE id=? AND user_id=?",
+        1, $id, $this->user
       );
     }
   }
