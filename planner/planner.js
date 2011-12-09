@@ -20,6 +20,7 @@ $(document).ready(function() {
   // load plans
   rcmail.http_post('plugin.plan_retrieve', '_p=all');
   $('#all').toggleClass("active");
+  $('#planner_raw').focus();
 
   // listeners
   // use .on() for jQuery 1.7+
