@@ -29,6 +29,14 @@ $(document).ready(function() {
     rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
     $('#planner_raw').val("");
   });
+  $('#planner_raw').keypress(function(e){
+	var keycode = (e.keyCode ? e.keyCode : e.which);
+	if(keycode == '13'){
+      rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
+      $('#planner_raw').val("");
+      return false;
+	}
+  });
   
   // plan functions
   $("a.done").live("click", function(){
