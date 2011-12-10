@@ -1,4 +1,4 @@
-/*
+  /*
  * Roundcube Planner
  * @version @package_version@
  * @author Lazlo Westerhof
@@ -14,7 +14,8 @@ $(document).ready(function() {
     rcmail.http_post('plugin.plan_retrieve', '_p=' + list);
   });
   rcmail.addEventListener('plugin.plan_edit', function(response) {
-    $('#' + response.id + ' span.edit').replaceWith('<input id="plan_edit_raw" value="' + response.raw + '"/><input id="planner_edit_save" type="button" value="Save"><input id="planner_edit_cancel" type="button" value="Cancel">');
+    $('#' + response.id + ' span.edit').replaceWith('<input id="plan_edit_raw" type="text" value="' + response.raw + '"/><input id="planner_edit_save" class="plan_submit" type="button" value="Save"><input id="planner_edit_cancel" class="plan_submit" type="button" value="Cancel">');
+    $('#' + response.id + ' #plan_edit_raw').focus();
   });
 
   // load plans
