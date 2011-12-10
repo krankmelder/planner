@@ -34,8 +34,7 @@ $(document).ready(function() {
 	if(keycode == '13'){
       rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
       $('#planner_raw').val("");
-      return false;
-	}
+   	}
   });
   
   // plan functions
