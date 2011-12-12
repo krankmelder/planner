@@ -95,8 +95,9 @@ class planner extends rcube_plugin
       $formatted = $this->rawToFormatted($raw);
 
       $datetime = null;
+      // convert usertime to GMT
       if(!empty($formatted['datetime'])) {
-        $datetime = date( 'Y-m-d H:i:s', strtotime($formatted['datetime']));
+        $datetime = date( 'Y-m-d H:i:s', $this->toGMT(strtotime($formatted['datetime'])));
       }
 
       $query = $this->rc->db->query(
@@ -166,8 +167,9 @@ class planner extends rcube_plugin
       $formatted = $this->rawToFormatted($raw);
       
       $datetime = null;
+      // convert usertime to GMT
       if(!empty($formatted['datetime'])) {
-        $datetime = date( 'Y-m-d H:i:s', strtotime($formatted['datetime']));
+        $datetime = date( 'Y-m-d H:i:s', $this->toGMT(strtotime($formatted['datetime'])));
       }
       $query = $this->rc->db->query(
         "UPDATE planner SET datetime=?, text=? WHERE id=? AND user_id=?",
@@ -280,7 +282,7 @@ class planner extends rcube_plugin
       
 	  $raw = $plan['text'];
       if(!empty($plan['datetime'])) {
-		$raw = date('d/m/Y H:i', strtotime($plan['datetime'])) . " " . $plan['text'];
+		$raw = date('d/m/Y H:i', $this->toUserTime(strtotime($plan['datetime']))) . " " . $plan['text'];
 	  }
 	  
 	  $response = array('id' => $id, 'raw' => $raw);
@@ -399,7 +401,7 @@ class planner extends rcube_plugin
     $html = "<ul>";
     // loop over all plans retrieved
     while ($result && ($plan = $this->rc->db->fetch_assoc($result))) {
-	  $timestamp = strtotime($plan['datetime']);
+	  $timestamp = $this->toUserTime(strtotime($plan['datetime']));
 	  if(date('Ymd', $timestamp) === date('Ymd')) {
 		 $html.= "<li id=\"" . $plan['id'] . "\" class=\"today\">";
 	  }
@@ -425,7 +427,7 @@ class planner extends rcube_plugin
           $html.= "<span class=\"nodate\">" . $plan['text'] . "</span>";
       }
       $html.= "</span>";
-	// finished plan
+	  // finished plan
       if($done) {
         $html.= "<a class=\"delete\" href=\"#\" title=\"" . $this->getText('delete') . "\"></a>";
       }
@@ -438,6 +440,46 @@ class planner extends rcube_plugin
     $html .= "</ul>";
 
     return $html;
+  }
+  
+  /**
+   * Correct GMT timestamp with timezone to user timestamp
+   *
+   * @param  timestamp GMT timestamp 
+   * @return int       User timestamp
+   */
+  private function toUserTime($timestamp) {	 
+    return ($timestamp + $this->getTimzoneOffset($timestamp));
+  }
+  
+  /**
+   * Correct user timestamp with timezone to GMT timestamp
+   *
+   * @param  timestamp User timestamp 
+   * @return int       GMT timestamp
+   */
+  private function toGMT($timestamp) {	 
+    return ($timestamp - $this->getTimzoneOffset($timestamp));
+  }
+  
+  /**
+   * Get offset of user timezone with GMT
+   *
+   * @return int User timezone offset
+   */
+   function getTimzoneOffset() {
+	// get timezone provided by the user
+	$timezone = 0;
+    if ($this->rc->config->get('timezone') === "auto") {
+      $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : date('Z')/3600;
+    } else {
+      $timezone = $this->rc->config->get('timezone');
+      if($this->rc->config->get('dst_active')) {
+        $timezone++;
+      }
+    }
+    // calculate timezone offset
+    return ($timezone * 3600);
   }
 }
 ?>
