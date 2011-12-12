@@ -41,25 +41,32 @@ class planner extends rcube_plugin
     $this->rc = rcmail::get_instance();
     $this->user = $this->rc->user->ID;
 
-	// load configuration
-	$this->load_config('config.inc.php.dist');
-	$this->load_config('config.inc.php');
-    
+    // load configuration
+    $this->load_config('config.inc.php.dist');
+    $this->load_config('config.inc.php');
+   
     // load localization
     $this->add_texts('localization/', true);
-
-    // register actions
-    $this->register_action('plugin.planner', array($this, 'startup'));
-    $this->register_action('plugin.plan_init', array($this, 'plan_init'));
-    $this->register_action('plugin.plan_new', array($this, 'plan_new'));
-    $this->register_action('plugin.plan_done', array($this, 'plan_done'));
-    $this->register_action('plugin.plan_star', array($this, 'plan_star'));
-    $this->register_action('plugin.plan_unstar', array($this, 'plan_unstar'));
-    $this->register_action('plugin.plan_edit', array($this, 'plan_edit'));
-    $this->register_action('plugin.plan_delete', array($this, 'plan_delete'));
-    $this->register_action('plugin.plan_retrieve', array($this, 'plan_retrieve'));
-    $this->register_action('plugin.plan_raw', array($this, 'plan_raw'));
-
+      
+    if($this->rc->task == 'settings') {
+      $this->add_hook('preferences_sections_list', array($this, 'preferences_section'));
+      $this->add_hook('preferences_list', array($this, 'preferences_list'));
+      $this->add_hook('preferences_save', array($this, 'preferences_save'));
+    }
+    else {
+      // register actions
+      $this->register_action('plugin.planner', array($this, 'startup'));
+      $this->register_action('plugin.plan_init', array($this, 'plan_init'));
+      $this->register_action('plugin.plan_new', array($this, 'plan_new'));
+      $this->register_action('plugin.plan_done', array($this, 'plan_done'));
+      $this->register_action('plugin.plan_star', array($this, 'plan_star'));
+      $this->register_action('plugin.plan_unstar', array($this, 'plan_unstar'));
+      $this->register_action('plugin.plan_edit', array($this, 'plan_edit'));
+      $this->register_action('plugin.plan_delete', array($this, 'plan_delete'));
+      $this->register_action('plugin.plan_retrieve', array($this, 'plan_retrieve'));
+      $this->register_action('plugin.plan_raw', array($this, 'plan_raw'));
+    }
+    
     // add planner button to taskbar
     $this->add_button(array(
       'name'    => 'planner',
@@ -306,6 +313,67 @@ class planner extends rcube_plugin
 	  $response = array('id' => $id, 'raw' => $raw);
       $this->rc->output->command('plugin.plan_edit', $response);
     }
+  }
+
+  /**
+   * Handler for preferences_sections_list hook.
+   * Adds Planner settings sections into preferences sections list.
+   *
+   * @param array Original parameters
+   *
+   * @return array Modified parameters
+   */
+  function preferences_section($p) {
+    $p['list']['plannersettings'] = array(
+      'id' => 'plannersettings', 'section' => $this->gettext('planner'),
+    );
+
+    return $p;
+  }
+
+  /**
+   * Handler for preferences_list hook.
+   * Adds options blocks into Planner settings sections in Preferences.
+   *
+   * @param array Original parameters
+   *
+   * @return array Modified parameters
+   */
+  function preferences_list($p) {
+    if ($p['section'] == 'plannersettings') {
+      $p['blocks']['planner']['name'] = $this->gettext('planner');
+   
+      $default_list = $this->rc->config->get('default_list', "all");
+      $field_id = 'rcmfd_default_list';
+      $select = new html_select(array('name' => '_default_list', 'id' => $field_id));
+      $select->add($this->gettext('all'), "all");
+      $select->add($this->gettext('starred'), "starred");
+      $select->add($this->gettext('today'), "today");
+      $select->add($this->gettext('tomorrow'), "tomorrow");
+      $select->add($this->gettext('week'), "week");
+      $select->add($this->gettext('done'), "done");      
+      $p['blocks']['planner']['options']['default_list'] = array(
+        'title' => html::label($field_id, Q($this->gettext('default_list'))),
+        'content' => $select->show($this->rc->config->get('default_list')),
+      );
+    } 
+    return $p;
+  }
+
+  /**
+   * Handler for preferences_save hook.
+   * Executed on Planner settings form submit.
+   *
+   * @param array Original parameters
+   *
+   * @return array Modified parameters
+   */
+  function preferences_save($p) {
+    if ($p['section'] == 'plannersettings') {
+      $p['prefs']['default_list'] = get_input_value('_default_list', RCUBE_INPUT_POST);
+    }
+    
+    return $p;
   }
 
   /**

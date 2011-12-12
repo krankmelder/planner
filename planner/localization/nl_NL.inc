@@ -28,4 +28,6 @@ $labels['help'] = 'Help';
 $labels['syntax'] = 'Syntax';
 $labels['help_text'] = 'Gebruik het veld hierboven om een plan toe te voegen en specificeer een "wanneer" (een datum en misschien een tijd) and "wat".
 	                    Als "wanneer" leeg is zal er geen datum/tijd worden toegevoegd.';
+	                    
+$labels['default_list'] = 'Standaard lijst';
 ?>

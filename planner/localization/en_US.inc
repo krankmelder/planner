@@ -28,4 +28,6 @@ $labels['help'] = 'Help';
 $labels['syntax'] = 'Syntax';
 $labels['help_text'] = 'To add a plan use the input above and specify "when" (a date and maybe a time) and "what".
 	                    If "when" is empty no date/time will be added.';
+	                    
+$labels['default_list'] = 'Default list';
 ?>
