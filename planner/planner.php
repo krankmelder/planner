@@ -41,11 +41,16 @@ class planner extends rcube_plugin
     $this->rc = rcmail::get_instance();
     $this->user = $this->rc->user->ID;
 
+	// load configuration
+	$this->load_config('config.inc.php.dist');
+	$this->load_config('config.inc.php');
+    
     // load localization
     $this->add_texts('localization/', true);
 
     // register actions
     $this->register_action('plugin.planner', array($this, 'startup'));
+    $this->register_action('plugin.plan_init', array($this, 'plan_init'));
     $this->register_action('plugin.plan_new', array($this, 'plan_new'));
     $this->register_action('plugin.plan_done', array($this, 'plan_done'));
     $this->register_action('plugin.plan_star', array($this, 'plan_star'));
@@ -85,7 +90,20 @@ class planner extends rcube_plugin
     // send output
     $this->rc->output->send('planner.planner');
   }
-   
+  
+  /**
+   * Load all settings to initialize javascript
+   */
+  function plan_init() {
+    if (!empty($this->user)) {
+	  // load configuration
+	  $config = array();
+	  $config['default_list'] = (string)$this->rc->config->get('default_list', "all");
+    
+      $this->rc->output->command('plugin.plan_init', $config);
+    }
+  }
+
   /**
    * Create new plan
    */

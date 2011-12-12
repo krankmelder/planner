@@ -1,0 +1,4 @@
+<?php
+// default planner list (all, starred, today, tomorrow, week, done)
+$rcmail_config['default_list'] = "all";
+?>

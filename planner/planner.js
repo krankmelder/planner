@@ -17,11 +17,15 @@ $(document).ready(function() {
     $('#' + response.id + ' span.edit').replaceWith('<input id="plan_edit_raw" type="text" value="' + response.raw + '"/><input id="planner_edit_save" class="plan_submit" type="button" value="Save"><input id="planner_edit_cancel" class="plan_submit" type="button" value="Cancel">');
     $('#' + response.id + ' #plan_edit_raw').focus();
   });
-
-  // load plans
-  rcmail.http_post('plugin.plan_retrieve', '_p=all');
-  $('#all').toggleClass("active");
-  $('#planner_raw').focus();
+  rcmail.addEventListener('plugin.plan_init', function(response) {
+    list = response['default_list'];
+    rcmail.http_post('plugin.plan_retrieve', '_p=' + list);
+    $('#' + list).toggleClass("active");
+    $('#planner_raw').focus();
+  });
+  
+  // startup planner javascript
+  rcmail.http_post('plugin.plan_init', '');
 
   // listeners
   // use .on() for jQuery 1.7+
@@ -96,6 +100,7 @@ $(document).ready(function() {
     $(this).toggleClass("active");
   });
   
+  // set active view
   function setActive(id) {
     $('#' + list).toggleClass("active");
     list = id;
