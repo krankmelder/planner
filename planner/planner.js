@@ -8,7 +8,7 @@ $(document).ready(function() {
 
   // add event listeners
   rcmail.addEventListener('plugin.plan_retrieve', function(response) {
-    $('#planner_items').html(response);
+    $('#plans').html(response);
     $('#planner_raw').focus();
   });
   rcmail.addEventListener('plugin.plan_reload', function(response) {
@@ -106,4 +106,11 @@ $(document).ready(function() {
     list = id;
     $('#' + id).toggleClass("active");
   }
+  
+  // scroll plans
+  $(document).scroll(function(){
+    $('#plans').stop().animate({
+      scrollTop : $(this).scrollTop()
+    });            
+  });
 });
