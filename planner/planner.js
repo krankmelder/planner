@@ -9,6 +9,7 @@ $(document).ready(function() {
   // add event listeners
   rcmail.addEventListener('plugin.plan_retrieve', function(response) {
     $('#planner_items').html(response);
+    $('#planner_raw').focus();
   });
   rcmail.addEventListener('plugin.plan_reload', function(response) {
     rcmail.http_post('plugin.plan_retrieve', '_p=' + list);
@@ -21,7 +22,6 @@ $(document).ready(function() {
     list = response['default_list'];
     rcmail.http_post('plugin.plan_retrieve', '_p=' + list);
     $('#' + list).toggleClass("active");
-    $('#planner_raw').focus();
   });
   
   // startup planner javascript
