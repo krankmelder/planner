@@ -94,6 +94,18 @@ ul#planner_controls li {
   padding: 10px 20px;
   font-weight: bold;
 }
+span.count {
+  position: relative;
+  bottom: 2px;
+  font-size: 10px;
+  min-width: 12px;
+  background-color: #cc3333;
+  color: #ffffff;
+  padding: 0 3px;
+  text-shadow: #444444;
+  border-radius: 8px;
+  box-shadow: 0pt 1px 3px rgba(0, 0, 0, 0.25);
+}
 #planner_help {
   display: none;
   width: 600px;
