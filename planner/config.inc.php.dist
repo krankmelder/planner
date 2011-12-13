@@ -3,4 +3,7 @@
 // default planner list (all, starred, today, tomorrow, week, done)
 $rcmail_config['default_list'] = "all";
 
+// show todo's always when true or only in all, starred and done
+$rcmail_config['list_todo_always'] = true;
+
 ?>

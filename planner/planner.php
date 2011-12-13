@@ -227,6 +227,12 @@ class planner extends rcube_plugin
   function plan_retrieve() {
     if (!empty($this->user)) {
       $done = false;
+      
+      // show todo's always when true or only in all, starred and done
+      $todo = "";
+      if($this->rc->config->get('list_todo_always')) {
+		$todo = " OR datetime IS NULL";
+	  }
       switch(get_input_value('_p', RCUBE_INPUT_POST)) {
         // retrieve all
         case "all":
@@ -247,7 +253,7 @@ class planner extends rcube_plugin
         // retrieve today's
         case "today":
           $result = $this->rc->db->query("SELECT * FROM planner
-                                          WHERE user_id=? AND done =? AND deleted =? AND DATE(datetime) = DATE(NOW())
+                                          WHERE user_id=? AND done =? AND deleted =? AND (DATE(datetime) = DATE(NOW())". $todo . ")
                                           ORDER BY `datetime` ASC",
                                           $this->rc->user->ID, 0, 0
                                          );
@@ -255,7 +261,7 @@ class planner extends rcube_plugin
         // retrieve tomorrow's
         case "tomorrow":
           $result = $this->rc->db->query("SELECT * FROM planner
-                                          WHERE user_id=? AND done =? AND deleted =? AND TO_DAYS(datetime) = TO_DAYS(NOW())+1
+                                          WHERE user_id=? AND done =? AND deleted =? AND (TO_DAYS(datetime) = TO_DAYS(NOW())+1". $todo . ")
                                           ORDER BY `datetime` ASC",
                                           $this->rc->user->ID, 0, 0
                                          );
@@ -263,7 +269,7 @@ class planner extends rcube_plugin
         // retrieve this week
         case "week":
           $result = $this->rc->db->query("SELECT * FROM planner
-                                          WHERE user_id=? AND done =? AND deleted =? AND WEEK(datetime) = WEEK(NOW())
+                                          WHERE user_id=? AND done =? AND deleted =? AND (WEEK(datetime) = WEEK(NOW())". $todo . ")
                                           ORDER BY `datetime` ASC",
                                           $this->rc->user->ID, 0, 0
                                          );
@@ -341,7 +347,7 @@ class planner extends rcube_plugin
    */
   function preferences_list($p) {
     if ($p['section'] == 'plannersettings') {
-      $p['blocks']['planner']['name'] = $this->gettext('planner');
+      $p['blocks']['planner']['name'] = $this->gettext('mainoptions');
    
       $default_list = $this->rc->config->get('default_list', "all");
       $field_id = 'rcmfd_default_list';
@@ -356,6 +362,15 @@ class planner extends rcube_plugin
         'title' => html::label($field_id, Q($this->gettext('default_list'))),
         'content' => $select->show($this->rc->config->get('default_list')),
       );
+      
+      $list_todo_always = $this->rc->config->get('list_todo_always');
+	            $field_id = 'rcmfd_list_todo_always';
+	            $checkbox = new html_checkbox(array('name' => '_list_todo_always', 'id' => $field_id, 'value' => 1));
+	
+	            $p['blocks']['planner']['options']['list_todo_always'] = array(
+	                'title' => html::label($field_id, Q($this->gettext('list_todo_always'))),
+	                'content' => $checkbox->show($list_todo_always?1:0),
+	            );
     } 
     return $p;
   }
@@ -371,6 +386,7 @@ class planner extends rcube_plugin
   function preferences_save($p) {
     if ($p['section'] == 'plannersettings') {
       $p['prefs']['default_list'] = get_input_value('_default_list', RCUBE_INPUT_POST);
+      $p['prefs']['list_todo_always'] = get_input_value('_list_todo_always', RCUBE_INPUT_POST) ? true : false;
     }
     
     return $p;

@@ -30,4 +30,6 @@ $labels['help_text'] = 'To add a plan use the input above and specify "when" (a 
 	                    If "when" is empty no date/time will be added.';
 	                    
 $labels['default_list'] = 'Default list';
+$labels['list_todo_always'] = 'Show todo-plans always';
+
 ?>

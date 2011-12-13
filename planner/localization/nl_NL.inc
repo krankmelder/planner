@@ -30,4 +30,6 @@ $labels['help_text'] = 'Gebruik het veld hierboven om een plan toe te voegen en 
 	                    Als "wanneer" leeg is zal er geen datum/tijd worden toegevoegd.';
 	                    
 $labels['default_list'] = 'Standaard lijst';
+$labels['list_todo_always'] = 'Laat todo-plans altijd zien';
+
 ?>
