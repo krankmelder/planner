@@ -96,7 +96,7 @@ ul#planner_controls li {
 }
 span.count {
   position: relative;
-  bottom: 2px;
+  bottom: 1px;
   font-size: 10px;
   min-width: 12px;
   background-color: #cc3333;
