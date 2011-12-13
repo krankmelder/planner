@@ -11,8 +11,17 @@ $(document).ready(function() {
     $('#plans').html(response);
     $('#planner_raw').focus();
   });
+  rcmail.addEventListener('plugin.plan_counts', function(response) {
+    // set list counts
+    var lists = ['all', 'starred', 'today', 'tomorrow', 'week']; 
+	$.each(lists, function(key, value) { 
+	  $('#' + value + ' span.count').html(response[value]);
+	});
+  });
   rcmail.addEventListener('plugin.plan_reload', function(response) {
     rcmail.http_post('plugin.plan_retrieve', '_p=' + list);
+    // set list counts
+    rcmail.http_post('plugin.plan_counts', '');
   });
   rcmail.addEventListener('plugin.plan_edit', function(response) {
     $('#' + response.id + ' span.edit').replaceWith('<input id="plan_edit_raw" type="text" value="' + response.raw + '"/><input id="planner_edit_save" class="plan_submit" type="button" value="Save"><input id="planner_edit_cancel" class="plan_submit" type="button" value="Cancel">');
@@ -20,8 +29,12 @@ $(document).ready(function() {
   });
   rcmail.addEventListener('plugin.plan_init', function(response) {
     list = response['default_list'];
+    // load plans
     rcmail.http_post('plugin.plan_retrieve', '_p=' + list);
+    // set list counts
+    rcmail.http_post('plugin.plan_counts', '');
     $('#' + list).toggleClass("active");
+
   });
   
   // startup planner javascript
@@ -33,6 +46,9 @@ $(document).ready(function() {
 	if($('#planner_raw').val() != "") {
 	  rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
 	  $('#planner_raw').val("");
+	  // increase listcount by 1
+	  var count = parseInt($('#' + list + ' span.count').text(),10)+1;
+	  $('#' + list + ' span.count').html(count);
       return false;
     }
   });
@@ -42,6 +58,9 @@ $(document).ready(function() {
       if(keycode == '13'){
         rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
         $('#planner_raw').val("");
+	    // increase listcount by 1
+	    var count = parseInt($('#' + list + ' span.count').text(),10)+1;
+	    $('#' + list + ' span.count').html(count);
         return false;
       }
     }
@@ -51,6 +70,8 @@ $(document).ready(function() {
   $("a.done").live("click", function(){
     rcmail.http_post('plugin.plan_done', '_id=' + $(this).parent().attr("id"));
     $(this).parent().remove();
+    // set list counts
+    rcmail.http_post('plugin.plan_counts', '');
   });
   $('a.star').live("click", function(){
     rcmail.http_post('plugin.plan_unstar', '_id=' + $(this).parent().attr("id"));

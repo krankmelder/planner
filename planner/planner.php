@@ -64,6 +64,7 @@ class planner extends rcube_plugin
       $this->register_action('plugin.plan_edit', array($this, 'plan_edit'));
       $this->register_action('plugin.plan_delete', array($this, 'plan_delete'));
       $this->register_action('plugin.plan_retrieve', array($this, 'plan_retrieve'));
+      $this->register_action('plugin.plan_counts', array($this, 'plan_counts'));
       $this->register_action('plugin.plan_raw', array($this, 'plan_raw'));
     }
     
@@ -99,14 +100,14 @@ class planner extends rcube_plugin
   }
   
   /**
-   * Load all settings to initialize javascript
+   * Send plugin confiuration and list count to client
    */
   function plan_init() {
     if (!empty($this->user)) {
-	  // load configuration
+	  // send configuration to client
 	  $config = array();
 	  $config['default_list'] = (string)$this->rc->config->get('default_list', "all");
-    
+      
       $this->rc->output->command('plugin.plan_init', $config);
     }
   }
@@ -292,11 +293,53 @@ class planner extends rcube_plugin
                                          );
           break;
       }
+      
       // send plans to client
       $this->rc->output->command('plugin.plan_retrieve', $this->html($result, $done));
     }
   }
+
+  /**
+   * Retrieve the number of plans in each list
+   */
+  function plan_counts() {
+    // count todo plans?
+    $todo = "";
+    if($this->rc->config->get('list_todo_always')) {
+      $todo = " OR datetime IS NULL";
+	}
   
+    // retrieve all the list counts
+    $counts= array();
+    $all = $this->rc->db->query("SELECT id FROM planner
+                                 WHERE user_id=? AND done =? AND deleted =?",
+                                 $this->rc->user->ID, 0, 0
+                                );
+    $counts['all'] = $this->rc->db->num_rows($all);
+    $starred = $this->rc->db->query("SELECT id FROM planner
+                                     WHERE user_id=? AND done =? AND deleted =? AND starred =?",
+                                     $this->rc->user->ID, 0, 0, 1
+                                    );
+    $counts['starred'] = $this->rc->db->num_rows($starred);
+    $today = $this->rc->db->query("SELECT id FROM planner
+                                   WHERE user_id=? AND done =? AND deleted =? AND (DATE(datetime) = DATE(NOW())". $todo . ")",
+                                   $this->rc->user->ID, 0, 0
+                                  );
+    $counts['today'] = $this->rc->db->num_rows($today);
+    $tomorrow = $this->rc->db->query("SELECT id FROM planner
+                                      WHERE user_id=? AND done =? AND deleted =? AND (TO_DAYS(datetime) = TO_DAYS(NOW())+1". $todo . ")",
+                                      $this->rc->user->ID, 0, 0
+                                     );
+    $counts['tomorrow'] = $this->rc->db->num_rows($tomorrow);
+    $week = $this->rc->db->query("SELECT id FROM planner
+                                  WHERE user_id=? AND done =? AND deleted =? AND (WEEK(datetime) = WEEK(NOW())". $todo . ")",
+                                  $this->rc->user->ID, 0, 0
+                                 );
+    $counts['week'] = $this->rc->db->num_rows($week);      
+
+    $this->rc->output->command('plugin.plan_counts', $counts);
+  }
+
   /**
    * Retrieve a plan in raw format for editing
    */
@@ -380,7 +423,6 @@ class planner extends rcube_plugin
    * Executed on Planner settings form submit.
    *
    * @param array Original parameters
-   *
    * @return array Modified parameters
    */
   function preferences_save($p) {
@@ -391,7 +433,7 @@ class planner extends rcube_plugin
     
     return $p;
   }
-
+  
   /**
    * Convert raw plan to formatted item with seperated date, time and text.
    * Returns formatted array if it is an item with a datetime.
@@ -570,7 +612,7 @@ class planner extends rcube_plugin
    *
    * @return int User timezone offset
    */
-   function getTimzoneOffset() {
+   private function getTimzoneOffset() {
 	// get timezone provided by the user
 	$timezone = 0;
     if ($this->rc->config->get('timezone') === "auto") {
