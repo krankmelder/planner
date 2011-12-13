@@ -30,16 +30,20 @@ $(document).ready(function() {
   // listeners
   // use .on() for jQuery 1.7+
   $('#planner_submit').click(function() {
-    rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
-    $('#planner_raw').val("");
-    return false;
+	if($('#planner_raw').val() != "") {
+	  rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
+	  $('#planner_raw').val("");
+      return false;
+    }
   });
   $('#planner_raw').keypress(function(e){
-	var keycode = (e.keyCode ? e.keyCode : e.which);
-	if(keycode == '13'){
-      rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
-      $('#planner_raw').val("");
-      return false;
+	if($('#planner_raw').val() != "") {
+	  var keycode = (e.keyCode ? e.keyCode : e.which);
+      if(keycode == '13'){
+        rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
+        $('#planner_raw').val("");
+        return false;
+      }
     }
   });
   
