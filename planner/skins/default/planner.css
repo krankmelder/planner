@@ -117,7 +117,7 @@ ul#planner_controls li {
   width: 700px;
   border-radius: 5px 5px;
 }
-#plans li.today {
+#plans li.highlight {
   background: #efefef;
 }
 #plans li a {

@@ -504,8 +504,9 @@ class planner extends rcube_plugin
     // loop over all plans retrieved
     while ($result && ($plan = $this->rc->db->fetch_assoc($result))) {
 	  $timestamp = $this->toUserTime(strtotime($plan['datetime']));
-	  if(date('Ymd', $timestamp) === date('Ymd')) {
-		 $html.= "<li id=\"" . $plan['id'] . "\" class=\"today\">";
+	  // highlight today's and starred plans
+	  if(date('Ymd', $timestamp) === date('Ymd') || $plan['starred']) {
+		 $html.= "<li id=\"" . $plan['id'] . "\" class=\"highlight\">";
 	  }
 	  else {
 		 $html.= "<li id=\"" . $plan['id'] . "\">";
