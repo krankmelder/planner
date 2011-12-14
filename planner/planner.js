@@ -4,8 +4,10 @@
  * @author Lazlo Westerhof
  */
 $(document).ready(function() {
+  // settings
   var list = 'all';
-
+  var preview = true;
+  
   // add event listeners
   rcmail.addEventListener('plugin.plan_retrieve', function(response) {
     $('#plans').html(response);
@@ -24,15 +26,19 @@ $(document).ready(function() {
     rcmail.http_post('plugin.plan_counts', '');
   });
   rcmail.addEventListener('plugin.plan_preview', function(response) {
-    $('#plan_preview').html(response);
-    $('#plan_preview').show();
+    if(preview) {
+      $('#plan_preview').html(response);
+      $('#plan_preview').show();
+    }
   });
   rcmail.addEventListener('plugin.plan_edit', function(response) {
     $('#' + response.id + ' span.edit').replaceWith('<input id="plan_edit_raw" type="text" value="' + response.raw + '"/><input id="planner_edit_save" class="plan_submit" type="button" value="Save"><input id="planner_edit_cancel" class="plan_submit" type="button" value="Cancel">');
     $('#' + response.id + ' #plan_edit_raw').focus();
   });
   rcmail.addEventListener('plugin.plan_init', function(response) {
+    // override settings
     list = response['default_list'];
+    preview = response['preview_plan'];
     // load plans
     rcmail.http_post('plugin.plan_retrieve', '_p=' + list);
     // set list counts
@@ -75,7 +81,9 @@ $(document).ready(function() {
     }
   });
   $('#planner_raw').keyup(function() {
-    rcmail.http_post('plugin.plan_preview', '_p=' + encodeURIComponent($('#planner_raw').val()));
+    if(preview) {
+      rcmail.http_post('plugin.plan_preview', '_p=' + encodeURIComponent($('#planner_raw').val()));
+    }
   });
   $('#planner_raw').focusout(function() {
     if(!$('#planner_raw').val()) {

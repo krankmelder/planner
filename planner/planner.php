@@ -108,7 +108,8 @@ class planner extends rcube_plugin
       // send configuration to client
       $config = array();
       $config['default_list'] = (string)$this->rc->config->get('default_list', "all");
-      
+      $config['preview_plan'] = $this->rc->config->get('preview_plan', true);
+
       $this->rc->output->command('plugin.plan_init', $config);
     }
   }
@@ -437,13 +438,20 @@ class planner extends rcube_plugin
         'content' => $select->show($this->rc->config->get('default_list')),
       );
       
-      $list_todo_always = $this->rc->config->get('list_todo_always');
+      $list_todo_always = $this->rc->config->get('list_todo_always', false);
       $field_id = 'rcmfd_list_todo_always';
       $checkbox = new html_checkbox(array('name' => '_list_todo_always', 'id' => $field_id, 'value' => 1));
-
       $p['blocks']['planner']['options']['list_todo_always'] = array(
         'title' => html::label($field_id, Q($this->gettext('list_todo_always'))),
         'content' => $checkbox->show($list_todo_always?1:0),
+      );
+      
+      $preview = $this->rc->config->get('preview_plan', true);
+      $field_id = 'rcmfd_preview_plan';
+      $checkbox = new html_checkbox(array('name' => '_preview_plan', 'id' => $field_id, 'value' => 1));
+      $p['blocks']['planner']['options']['preview_plan'] = array(
+        'title' => html::label($field_id, Q($this->gettext('preview'))),
+        'content' => $checkbox->show($preview?1:0),
       );
     } 
     return $p;
@@ -460,6 +468,7 @@ class planner extends rcube_plugin
     if ($p['section'] == 'plannersettings') {
       $p['prefs']['default_list'] = get_input_value('_default_list', RCUBE_INPUT_POST);
       $p['prefs']['list_todo_always'] = get_input_value('_list_todo_always', RCUBE_INPUT_POST) ? true : false;
+      $p['prefs']['preview_plan'] = get_input_value('_preview_plan', RCUBE_INPUT_POST) ? true : false;
     }
     
     return $p;
