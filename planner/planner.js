@@ -23,6 +23,10 @@ $(document).ready(function() {
     // set list counts
     rcmail.http_post('plugin.plan_counts', '');
   });
+  rcmail.addEventListener('plugin.plan_preview', function(response) {
+    $('#plan_preview').html(response);
+    $('#plan_preview').show();
+  });
   rcmail.addEventListener('plugin.plan_edit', function(response) {
     $('#' + response.id + ' span.edit').replaceWith('<input id="plan_edit_raw" type="text" value="' + response.raw + '"/><input id="planner_edit_save" class="plan_submit" type="button" value="Save"><input id="planner_edit_cancel" class="plan_submit" type="button" value="Cancel">');
     $('#' + response.id + ' #plan_edit_raw').focus();
@@ -49,6 +53,9 @@ $(document).ready(function() {
 	  // increase listcount by 1
 	  var count = parseInt($('#' + list + ' span.count').text(),10)+1;
 	  $('#' + list + ' span.count').html(count);
+	  // remove preview
+	  $('#plan_preview').html("");
+      $('#plan_preview').hide();
       return false;
     }
   });
@@ -61,11 +68,17 @@ $(document).ready(function() {
 	    // increase listcount by 1
 	    var count = parseInt($('#' + list + ' span.count').text(),10)+1;
 	    $('#' + list + ' span.count').html(count);
+	    // remove preview
+	    $('#plan_preview').html("");
+        $('#plan_preview').hide();
         return false;
       }
     }
   });
-  
+  $('#planner_raw').keyup(function() {
+	rcmail.http_post('plugin.plan_preview', '_p=' + encodeURIComponent($('#planner_raw').val()));
+  });
+    
   // plan functions
   $("a.done").live("click", function(){
     rcmail.http_post('plugin.plan_done', '_id=' + $(this).parent().attr("id"));

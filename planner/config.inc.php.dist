@@ -6,4 +6,7 @@ $rcmail_config['default_list'] = "all";
 // show todo's always when true or only in all, starred and done
 $rcmail_config['list_todo_always'] = false;
 
+// show plan preview while composing
+$rcmail_config['preview_plan'] = true;
+
 ?>
