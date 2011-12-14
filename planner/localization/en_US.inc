@@ -3,6 +3,7 @@
 $labels = array();
 $labels['planner'] = 'Planner';
 $labels['plan'] = 'Plan';
+$labels['preview'] = 'Preview';
 
 $labels['new'] = 'New';
 $labels['done'] = 'Done';
@@ -27,7 +28,7 @@ $labels['show_done'] = 'Show done plans';
 $labels['help'] = 'Help';
 $labels['syntax'] = 'Syntax';
 $labels['help_text'] = 'To add a plan use the input above and specify "when" (a date and maybe a time) and "what".
-	                    If "when" is empty no date/time will be added.';
+                        If "when" is empty no date/time will be added.';
 	                    
 $labels['default_list'] = 'Default list';
 $labels['list_todo_always'] = 'Show todo-plans always';

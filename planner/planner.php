@@ -91,7 +91,7 @@ class planner extends rcube_plugin
    */
   function startup() {
     // set pagetitle
-    $this->rc->output->set_pagetitle($this->getText('planner'));
+    $this->rc->output->set_pagetitle($this->gettext('planner'));
 
     // include javascript
     $this->include_script('planner.js');
@@ -376,6 +376,9 @@ class planner extends rcube_plugin
       $formatted = $this->rawToFormatted($raw);
       
       // build preview html
+      // add preview badge
+      $preview = "<span id=\"badge\">" . $this->gettext('preview') . "</span>";
+
       // preview with date/time
       if(!empty($formatted['datetime'])) {
         $timestamp = strtotime($formatted['datetime']);

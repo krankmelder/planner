@@ -3,6 +3,7 @@
 $labels = array();
 $labels['planner'] = 'Planner';
 $labels['plan'] = 'Plan';
+$labels['preview'] = 'Preview';
 
 $labels['new'] = 'Nieuw';
 $labels['done'] = 'Klaar';
@@ -27,8 +28,8 @@ $labels['show_done'] = 'Laat afgeronde plannen zien';
 $labels['help'] = 'Help';
 $labels['syntax'] = 'Syntax';
 $labels['help_text'] = 'Gebruik het veld hierboven om een plan toe te voegen en specificeer een "wanneer" (een datum en misschien een tijd) and "wat".
-	                    Als "wanneer" leeg is zal er geen datum/tijd worden toegevoegd.';
-	                    
+                        Als "wanneer" leeg is zal er geen datum/tijd worden toegevoegd.';
+                      
 $labels['default_list'] = 'Standaard lijst';
 $labels['list_todo_always'] = 'Laat todo-plans altijd zien';
 
