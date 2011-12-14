@@ -59,8 +59,8 @@ $(document).ready(function() {
     }
   });
   $('#planner_raw').keypress(function(e){
-  if($('#planner_raw').val() != "") {
-    var keycode = (e.keyCode ? e.keyCode : e.which);
+    if($('#planner_raw').val() != "") {
+      var keycode = (e.keyCode ? e.keyCode : e.which);
       if(keycode == '13'){
         rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
         $('#planner_raw').val("");
@@ -75,7 +75,14 @@ $(document).ready(function() {
     }
   });
   $('#planner_raw').keyup(function() {
-  rcmail.http_post('plugin.plan_preview', '_p=' + encodeURIComponent($('#planner_raw').val()));
+    rcmail.http_post('plugin.plan_preview', '_p=' + encodeURIComponent($('#planner_raw').val()));
+  });
+  $('#planner_raw').change(function() {
+    if(!$('#planner_raw').val()) {
+      // remove preview
+      $('#plan_preview').html("");
+      $('#plan_preview').hide();
+    }
   });
     
   // plan functions
