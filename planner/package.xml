@@ -9,7 +9,7 @@
     <description>
     Planner is a task-management plugin for Roundcube.
     A hybrid between a todo-list and a calendar.
-    (https://github.com/roundcube-planner/planner)
+    (http://lazlo.me/roundcube-planner)
     </description>
     <lead>
         <name>Lazlo Westerhof</name>
@@ -23,8 +23,8 @@
         <api>0.1</api>
     </version>
     <stability>
-        <release>unstable</release>
-        <api>unstable</api>
+        <release>stable</release>
+        <api>stable</api>
     </stability>
     <license uri="http://www.gnu.org/licenses/gpl-2.0.html">GNU GPLv2</license>
     <notes>-</notes>
@@ -38,6 +38,7 @@
                 <tasks:replace from="@name@" to="name" type="package-info"/>
                 <tasks:replace from="@package_version@" to="version" type="package-info"/>
             </file>
+            <file name="config.inc.php.dist" role="data"></file>
             <file name="localization/en_US.inc" role="data"></file>
             <file name="localization/nl_NL.inc" role="data"></file>
             <file name="skins/default/planner.css" role="data"></file>
