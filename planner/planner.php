@@ -378,18 +378,18 @@ class planner extends rcube_plugin
       
       // build preview html
       // add preview badge
-      $preview = "<span id=\"badge\">" . $this->gettext('preview') . "</span>";
+      $preview .= html::span(array('id' => 'badge'), $this->gettext('preview'));
 
       // preview with date/time
       if(!empty($formatted['datetime'])) {
         $timestamp = strtotime($formatted['datetime']);
-        $preview .= "<span class=\"date\">" . date('d M', $timestamp) . "</span>";
-        $preview .= "<span class=\"time\">" . date('H:i', $timestamp) . "</span>";
-        $preview .= "<span class=\"datetime\">" . $formatted['text'] . "</span>";
+        $preview .= html::span('date', date('d M', $timestamp));
+        $preview .= html::span('time', date('H:i', $timestamp));
+        $preview .= html::span('datetime', $formatted['text']);
       }
       // preview without date/time
       else {
-        $preview .= "<span class=\"nodate\">" . $formatted['text'] . "</span>";
+        $preview .= html::span('nodate', $formatted['text']);
       } 
      
       $this->rc->output->command('plugin.plan_preview', $preview);
@@ -582,49 +582,49 @@ class planner extends rcube_plugin
    * @return string    Formatted planner as html
    */
   private function html($result, $done) {
-    $html = "<ul>";
     // loop over all plans retrieved
+    $plans = "";
     while ($result && ($plan = $this->rc->db->fetch_assoc($result))) {
       $timestamp = $this->toUserTime(strtotime($plan['datetime']));
-      // highlight today's and starred plans
-      if(date('Ymd', $timestamp) === date('Ymd') || $plan['starred']) {
-       $html .= "<li id=\"" . $plan['id'] . "\" class=\"highlight\">";
-      }
-      else {
-       $html .= "<li id=\"" . $plan['id'] . "\">";
-      }
+      $html = "";
       // starred plan
       if($plan['starred']) {
-        $html .= "<a class=\"star\" title=\"" . $this->getText('unmark') . "\"></a>";
+        $html .= html::a(array('class' => 'star', 'title' => $this->getText('unmark')), "");
       }
       else {
-        $html .= "<a class=\"nostar\" title=\"" . $this->getText('mark') . "\"></a>";
+        $html .= html::a(array('class' => 'nostar', 'title' => $this->getText('mark')), "");
       }
-      $html.= "<span class=\"edit\">";
       // plan with date/time
+      $content = "";
       if(!empty($plan['datetime'])) {
-        $html .= "<span class=\"date\">" . date('d M', $timestamp) . "</span>";
-        $html .= "<span class=\"time\">" . date('H:i', $timestamp) . "</span>";
-        $html .= "<span class=\"datetime\">" . $plan['text'] . "</span>";
+        $content .= html::span('date', date('d M', $timestamp));
+        $content .= html::span('time', date('H:i', $timestamp));
+        $content .= html::span('datetime', $plan['text']);
       }
       // plan without date/time
       else {
-        $html .= "<span class=\"nodate\">" . $plan['text'] . "</span>";
+        $content .= html::span('nodate', $plan['text']);
       }
-      $html .= "</span>";
+      $html .= html::span('edit', $content);
       // finished plan
       if($done) {
-        $html .= "<a class=\"delete\" href=\"#\" title=\"" . $this->getText('delete') . "\"></a>";
+        $html .= html::a(array('class' => 'delete', 'title' => $this->getText('delete')), "");
       }
       // not finished plan
       else {
-        $html .= "<a class=\"done\" href=\"#\" title=\"" . $this->getText('done') . "\"></a>";
+        $html .= html::a(array('class' => 'done', 'title' => $this->getText('done')), "");
+      }    
+      // highlight today's and starred plans
+      if(date('Ymd', $timestamp) === date('Ymd') || $plan['starred']) {
+       $plans .= html::tag('li', array('id' => $plan['id'], 'class' => 'highlight'), $html);
       }
-      $html .= "</li>";
+      else {
+       $plans .= html::tag('li', array('id' => $plan['id']), $html);
+      }
     }
-    $html .= "</ul>";
+    $list = html::tag('ul', array(), $plans);
 
-    return $html;
+    return $list;
   }
   
   /**
