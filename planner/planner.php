@@ -105,9 +105,9 @@ class planner extends rcube_plugin
    */
   function plan_init() {
     if (!empty($this->user)) {
-	  // send configuration to client
-	  $config = array();
-	  $config['default_list'] = (string)$this->rc->config->get('default_list', "all");
+      // send configuration to client
+      $config = array();
+      $config['default_list'] = (string)$this->rc->config->get('default_list', "all");
       
       $this->rc->output->command('plugin.plan_init', $config);
     }
@@ -233,8 +233,8 @@ class planner extends rcube_plugin
       // show todo's always when true or only in all, starred and done
       $todo = "";
       if($this->rc->config->get('list_todo_always')) {
-		$todo = " OR datetime IS NULL";
-	  }
+        $todo = " OR datetime IS NULL";
+      }
       switch(get_input_value('_p', RCUBE_INPUT_POST)) {
         // retrieve all
         case "all":
@@ -308,7 +308,7 @@ class planner extends rcube_plugin
     $todo = "";
     if($this->rc->config->get('list_todo_always')) {
       $todo = " OR datetime IS NULL";
-	}
+    }
   
     // retrieve all the list counts
     $counts= array();
@@ -355,12 +355,12 @@ class planner extends rcube_plugin
                                      
       $plan = $this->rc->db->fetch_assoc($result);
       
-	  $raw = $plan['text'];
+      $raw = $plan['text'];
       if(!empty($plan['datetime'])) {
-		$raw = date('d/m/Y H:i', $this->toUserTime(strtotime($plan['datetime']))) . " " . $plan['text'];
-	  }
-	  
-	  $response = array('id' => $id, 'raw' => $raw);
+        $raw = date('d/m/Y H:i', $this->toUserTime(strtotime($plan['datetime']))) . " " . $plan['text'];
+      }
+    
+      $response = array('id' => $id, 'raw' => $raw);
       $this->rc->output->command('plugin.plan_edit', $response);
     }
   }
@@ -372,20 +372,20 @@ class planner extends rcube_plugin
     if (!empty($this->user)) {
       $raw = get_input_value('_p', RCUBE_INPUT_POST);
 
-	  // format raw input
+      // format raw input
       $formatted = $this->rawToFormatted($raw);
       
       // build preview html
       // preview with date/time
       if(!empty($formatted['datetime'])) {
-		  $timestamp = strtotime($formatted['datetime']);
-          $preview .= "<span class=\"date\">" . date('d M', $timestamp) . "</span>";
-          $preview .= "<span class=\"time\">" . date('H:i', $timestamp) . "</span>";
-          $preview .= "<span class=\"datetime\">" . $formatted['text'] . "</span>";
+        $timestamp = strtotime($formatted['datetime']);
+        $preview .= "<span class=\"date\">" . date('d M', $timestamp) . "</span>";
+        $preview .= "<span class=\"time\">" . date('H:i', $timestamp) . "</span>";
+        $preview .= "<span class=\"datetime\">" . $formatted['text'] . "</span>";
       }
       // preview without date/time
       else {
-          $preview .= "<span class=\"nodate\">" . $formatted['text'] . "</span>";
+        $preview .= "<span class=\"nodate\">" . $formatted['text'] . "</span>";
       } 
      
       $this->rc->output->command('plugin.plan_preview', $preview);
@@ -435,13 +435,13 @@ class planner extends rcube_plugin
       );
       
       $list_todo_always = $this->rc->config->get('list_todo_always');
-	            $field_id = 'rcmfd_list_todo_always';
-	            $checkbox = new html_checkbox(array('name' => '_list_todo_always', 'id' => $field_id, 'value' => 1));
-	
-	            $p['blocks']['planner']['options']['list_todo_always'] = array(
-	                'title' => html::label($field_id, Q($this->gettext('list_todo_always'))),
-	                'content' => $checkbox->show($list_todo_always?1:0),
-	            );
+      $field_id = 'rcmfd_list_todo_always';
+      $checkbox = new html_checkbox(array('name' => '_list_todo_always', 'id' => $field_id, 'value' => 1));
+
+      $p['blocks']['planner']['options']['list_todo_always'] = array(
+        'title' => html::label($field_id, Q($this->gettext('list_todo_always'))),
+        'content' => $checkbox->show($list_todo_always?1:0),
+      );
     } 
     return $p;
   }
@@ -471,71 +471,71 @@ class planner extends rcube_plugin
    * @return array     Formatted item with seperated date/time
    */
   private function rawToFormatted($raw) {
-	$raw = trim($raw);
+  $raw = trim($raw);
     $split = preg_split("/[\s]+/", $raw, 3);
     // today
     if("today" == $split['0']) {
-        if($this->matchTime($split['1'])) {
-            $formatted['datetime'] = date('Y-m-d') . " " . $this->matchTime($split['1']);
-            $formatted['text'] = $split['2'];
-        }
-        else {
-            $formatted['datetime'] = date('Y-m-d') . "08:00:00";
-            $formatted['text'] = $split['1']. " " .$split['2'];
-        }
-        return $formatted;
+      if($this->matchTime($split['1'])) {
+        $formatted['datetime'] = date('Y-m-d') . " " . $this->matchTime($split['1']);
+        $formatted['text'] = $split['2'];
+      }
+      else {
+        $formatted['datetime'] = date('Y-m-d') . "08:00:00";
+        $formatted['text'] = $split['1']. " " .$split['2'];
+      }
+      return $formatted;
     }
     // tomorrow
     elseif("tomorrow" == $split['0']) {
-        if($this->matchTime($split['1'])) {
-            $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, date("m"), date("d")+1, date("Y"))) . $this->matchTime($split['1']);
-            $formatted['text'] = $split['2'];
-        }
-        else {
-            $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, date("m"), date("d")+1, date("Y"))) . "08:00:00";
-            $formatted['text'] = $split['1']. " " .$split['2'];
-        }
-        return $formatted;
+      if($this->matchTime($split['1'])) {
+        $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, date("m"), date("d")+1, date("Y"))) . $this->matchTime($split['1']);
+        $formatted['text'] = $split['2'];
+      }
+      else {
+        $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, date("m"), date("d")+1, date("Y"))) . "08:00:00";
+        $formatted['text'] = $split['1']. " " .$split['2'];
+      }
+      return $formatted;
     }
     // +5
     elseif(preg_match('/\+(([0-9][0-9])|([0-9]))/', $split['0'], $matches)) {
-        if($this->matchTime($split['1'])) {
-            $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, date("m"), date("d")+$matches['1'], date("Y"))) . $this->matchTime($split['1']);
-            $formatted['text'] = $split['2'];
-        }
-        else {
-            $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, date("m"), date("d")+$matches['1'], date("Y"))) . "08:00:00";
-            $formatted['text'] = $split['1']. " " .$split['2'];
-        }
-        return $formatted;
+      if($this->matchTime($split['1'])) {
+        $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, date("m"), date("d")+$matches['1'], date("Y"))) . $this->matchTime($split['1']);
+        $formatted['text'] = $split['2'];
+      }
+      else {
+        $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, date("m"), date("d")+$matches['1'], date("Y"))) . "08:00:00";
+        $formatted['text'] = $split['1']. " " .$split['2'];
+      }
+      return $formatted;
     }
     // dd/mm/yyyy
     elseif(preg_match('/(0[1-9]|[12][0-9]|3[01])[\.\-\/](0[1-9]|1[012])[\.\-\/]((20)[0-9][0-9])/', $split['0'], $matches)) {
-        if($this->matchTime($split['1'])) {
-            $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, $matches['2'], $matches['1'], $matches['3'])) . $this->matchTime($split['1']);
-            $formatted['text'] = $split['2'];
-        }
-        else {
-            $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, $matches['2'], $matches['1'], $matches['3'])) . "08:00:00";
-            $formatted['text'] = $split['1']. " " .$split['2'];
-        }
-        return $formatted;
-	}
+      if($this->matchTime($split['1'])) {
+        $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, $matches['2'], $matches['1'], $matches['3'])) . $this->matchTime($split['1']);
+        $formatted['text'] = $split['2'];
+      }
+      else {
+        $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, $matches['2'], $matches['1'], $matches['3'])) . "08:00:00";
+        $formatted['text'] = $split['1']. " " .$split['2'];
+      }
+      return $formatted;
+    }
     // dd/mm
     elseif(preg_match('/(0[1-9]|[12][0-9]|3[01])[\.\-\/](0[1-9]|1[012])/', $split['0'], $matches)) {
-        if($this->matchTime($split['1'])) {
-            $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, $matches['2'], $matches['1'], date('Y'))) . $this->matchTime($split['1']);
-            $formatted['text'] = $split['2'];
-        }
-        else {
-            $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, $matches['2'], $matches['1'], date('Y'))) . "08:00:00";
-            $formatted['text'] = $split['1']. " " .$split['2'];
-        }
-        return $formatted;
-	}
+      if($this->matchTime($split['1'])) {
+        $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, $matches['2'], $matches['1'], date('Y'))) . $this->matchTime($split['1']);
+        $formatted['text'] = $split['2'];
+      }
+      else {
+        $formatted['datetime'] = date('Y-m-d', mktime(0, 0, 0, $matches['2'], $matches['1'], date('Y'))) . "08:00:00";
+        $formatted['text'] = $split['1']. " " .$split['2'];
+      }
+      return $formatted;
+    }
     else {
-        $formatted['text'] = $raw;
-        return $formatted;
+      $formatted['text'] = $raw;
+      return $formatted;
     }
     return false;
   }
@@ -573,38 +573,38 @@ class planner extends rcube_plugin
     $html = "<ul>";
     // loop over all plans retrieved
     while ($result && ($plan = $this->rc->db->fetch_assoc($result))) {
-	  $timestamp = $this->toUserTime(strtotime($plan['datetime']));
-	  // highlight today's and starred plans
-	  if(date('Ymd', $timestamp) === date('Ymd') || $plan['starred']) {
-		 $html .= "<li id=\"" . $plan['id'] . "\" class=\"highlight\">";
-	  }
-	  else {
-		 $html .= "<li id=\"" . $plan['id'] . "\">";
-	  }
-      // starred plan
-      if($plan['starred']) {
-          $html .= "<a class=\"star\" title=\"" . $this->getText('unmark') . "\"></a>";
+      $timestamp = $this->toUserTime(strtotime($plan['datetime']));
+      // highlight today's and starred plans
+      if(date('Ymd', $timestamp) === date('Ymd') || $plan['starred']) {
+       $html .= "<li id=\"" . $plan['id'] . "\" class=\"highlight\">";
       }
       else {
-          $html .= "<a class=\"nostar\" title=\"" . $this->getText('mark') . "\"></a>";
+       $html .= "<li id=\"" . $plan['id'] . "\">";
+      }
+      // starred plan
+      if($plan['starred']) {
+        $html .= "<a class=\"star\" title=\"" . $this->getText('unmark') . "\"></a>";
+      }
+      else {
+        $html .= "<a class=\"nostar\" title=\"" . $this->getText('mark') . "\"></a>";
       }
       $html.= "<span class=\"edit\">";
       // plan with date/time
       if(!empty($plan['datetime'])) {
-          $html .= "<span class=\"date\">" . date('d M', $timestamp) . "</span>";
-          $html .= "<span class=\"time\">" . date('H:i', $timestamp) . "</span>";
-          $html .= "<span class=\"datetime\">" . $plan['text'] . "</span>";
+        $html .= "<span class=\"date\">" . date('d M', $timestamp) . "</span>";
+        $html .= "<span class=\"time\">" . date('H:i', $timestamp) . "</span>";
+        $html .= "<span class=\"datetime\">" . $plan['text'] . "</span>";
       }
       // plan without date/time
       else {
-          $html .= "<span class=\"nodate\">" . $plan['text'] . "</span>";
+        $html .= "<span class=\"nodate\">" . $plan['text'] . "</span>";
       }
       $html .= "</span>";
-	  // finished plan
+      // finished plan
       if($done) {
         $html .= "<a class=\"delete\" href=\"#\" title=\"" . $this->getText('delete') . "\"></a>";
       }
-	  // not finished plan
+      // not finished plan
       else {
         $html .= "<a class=\"done\" href=\"#\" title=\"" . $this->getText('done') . "\"></a>";
       }
@@ -621,7 +621,7 @@ class planner extends rcube_plugin
    * @param  timestamp GMT timestamp 
    * @return int       User timestamp
    */
-  private function toUserTime($timestamp) {	 
+  private function toUserTime($timestamp) {  
     return ($timestamp + $this->getTimzoneOffset($timestamp));
   }
   
@@ -631,7 +631,7 @@ class planner extends rcube_plugin
    * @param  timestamp User timestamp 
    * @return int       GMT timestamp
    */
-  private function toGMT($timestamp) {	 
+  private function toGMT($timestamp) {   
     return ($timestamp - $this->getTimzoneOffset($timestamp));
   }
   
@@ -641,8 +641,8 @@ class planner extends rcube_plugin
    * @return int User timezone offset
    */
    private function getTimzoneOffset() {
-	// get timezone provided by the user
-	$timezone = 0;
+  // get timezone provided by the user
+  $timezone = 0;
     if ($this->rc->config->get('timezone') === "auto") {
       $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : date('Z')/3600;
     } else {

@@ -14,9 +14,9 @@ $(document).ready(function() {
   rcmail.addEventListener('plugin.plan_counts', function(response) {
     // set list counts
     var lists = ['all', 'starred', 'today', 'tomorrow', 'week']; 
-	$.each(lists, function(key, value) { 
-	  $('#' + value + ' span.count').html(response[value]);
-	});
+    $.each(lists, function(key, value) { 
+      $('#' + value + ' span.count').html(response[value]);
+    });
   });
   rcmail.addEventListener('plugin.plan_reload', function(response) {
     rcmail.http_post('plugin.plan_retrieve', '_p=' + list);
@@ -38,7 +38,6 @@ $(document).ready(function() {
     // set list counts
     rcmail.http_post('plugin.plan_counts', '');
     $('#' + list).toggleClass("active");
-
   });
   
   // startup planner javascript
@@ -47,36 +46,36 @@ $(document).ready(function() {
   // listeners
   // use .on() for jQuery 1.7+
   $('#planner_submit').click(function() {
-	if($('#planner_raw').val() != "") {
-	  rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
-	  $('#planner_raw').val("");
-	  // increase listcount by 1
-	  var count = parseInt($('#' + list + ' span.count').text(),10)+1;
-	  $('#' + list + ' span.count').html(count);
-	  // remove preview
-	  $('#plan_preview').html("");
+    if($('#planner_raw').val() != "") {
+      rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
+      $('#planner_raw').val("");
+      // increase listcount by 1
+      var count = parseInt($('#' + list + ' span.count').text(),10)+1;
+      $('#' + list + ' span.count').html(count);
+      // remove preview
+      $('#plan_preview').html("");
       $('#plan_preview').hide();
       return false;
     }
   });
   $('#planner_raw').keypress(function(e){
-	if($('#planner_raw').val() != "") {
-	  var keycode = (e.keyCode ? e.keyCode : e.which);
+  if($('#planner_raw').val() != "") {
+    var keycode = (e.keyCode ? e.keyCode : e.which);
       if(keycode == '13'){
         rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
         $('#planner_raw').val("");
-	    // increase listcount by 1
-	    var count = parseInt($('#' + list + ' span.count').text(),10)+1;
-	    $('#' + list + ' span.count').html(count);
-	    // remove preview
-	    $('#plan_preview').html("");
+        // increase listcount by 1
+        var count = parseInt($('#' + list + ' span.count').text(),10)+1;
+        $('#' + list + ' span.count').html(count);
+        // remove preview
+        $('#plan_preview').html("");
         $('#plan_preview').hide();
         return false;
       }
     }
   });
   $('#planner_raw').keyup(function() {
-	rcmail.http_post('plugin.plan_preview', '_p=' + encodeURIComponent($('#planner_raw').val()));
+  rcmail.http_post('plugin.plan_preview', '_p=' + encodeURIComponent($('#planner_raw').val()));
   });
     
   // plan functions
