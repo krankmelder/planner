@@ -77,7 +77,7 @@ $(document).ready(function() {
   $('#planner_raw').keyup(function() {
     rcmail.http_post('plugin.plan_preview', '_p=' + encodeURIComponent($('#planner_raw').val()));
   });
-  $('#planner_raw').change(function() {
+  $('#planner_raw').focusout(function() {
     if(!$('#planner_raw').val()) {
       // remove preview
       $('#plan_preview').html("");
