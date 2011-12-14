@@ -32,5 +32,6 @@ $labels['help_text'] = 'Gebruik het veld hierboven om een plan toe te voegen en 
                       
 $labels['default_list'] = 'Standaard lijst';
 $labels['list_todo_always'] = 'Laat todo-plans altijd zien';
+$labels['preview_plan'] = 'Laat plan voorbeeld zien';
 
 ?>

@@ -32,5 +32,6 @@ $labels['help_text'] = 'To add a plan use the input above and specify "when" (a 
 	                    
 $labels['default_list'] = 'Default list';
 $labels['list_todo_always'] = 'Show todo-plans always';
+$labels['preview_plan'] = 'Show plan preview';
 
 ?>

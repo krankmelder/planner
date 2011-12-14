@@ -450,7 +450,7 @@ class planner extends rcube_plugin
       $field_id = 'rcmfd_preview_plan';
       $checkbox = new html_checkbox(array('name' => '_preview_plan', 'id' => $field_id, 'value' => 1));
       $p['blocks']['planner']['options']['preview_plan'] = array(
-        'title' => html::label($field_id, Q($this->gettext('preview'))),
+        'title' => html::label($field_id, Q($this->gettext('preview_plan'))),
         'content' => $checkbox->show($preview?1:0),
       );
     } 
