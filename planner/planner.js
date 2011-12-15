@@ -32,7 +32,7 @@ $(document).ready(function() {
     }
   });
   rcmail.addEventListener('plugin.plan_edit', function(response) {
-    $('#' + response.id + ' span.edit').replaceWith('<input id="plan_edit_raw" type="text" value="' + response.raw + '"/><input id="planner_edit_save" type="submit" value="Save"><input id="planner_edit_cancel" type="submit" value="Cancel">');
+    $('#' + response.id + ' span.edit').replaceWith(response.html);
     $('#' + response.id + ' #plan_edit_raw').focus();
   });
   rcmail.addEventListener('plugin.plan_init', function(response) {

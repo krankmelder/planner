@@ -360,8 +360,12 @@ class planner extends rcube_plugin
       if(!empty($plan['datetime'])) {
         $raw = date('d/m/Y H:i', $this->toUserTime(strtotime($plan['datetime']))) . " " . $plan['text'];
       }
-    
-      $response = array('id' => $id, 'raw' => $raw);
+
+      $html = html::tag('input', array('id' => 'plan_edit_raw', 'type' => 'text', 'value' => $raw));
+      $html .= html::tag('input', array('id' => 'planner_edit_save', 'type' => 'submit', 'value' => 'Save'));
+      $html .= html::tag('input', array('id' => 'planner_edit_cancel', 'type' => 'submit', 'value' => 'Cancel'));
+      
+      $response = array('id' => $id, 'html' => $html);
       $this->rc->output->command('plugin.plan_edit', $response);
     }
   }
