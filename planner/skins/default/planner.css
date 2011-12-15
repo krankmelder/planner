@@ -21,27 +21,25 @@
 #planner_input {
   height: 55px;
 }
-input#planner_raw, input#plan_edit_raw {
+#planner input[type="text"] {
+  width: 630px;
   height: 32px;
   padding: 0 4px;
   border: 1px solid #b2b2b2;
   border-radius: 3px;
   box-shadow: 0 0 2px 1px rgba(0,0,0, 0.1);
 }
-input#planner_raw:focus, input#plan_edit_raw:focus {
+#planner input[type="text"]:focus {
   border-color: #127fbe;
-}
-input#planner_raw {
-  width: 630px;
-}
-input#plan_edit_raw {
-  width: 460px;
 }
 #plans input {
   position: relative;
   top: -7px;
 }
-input.plan_submit {
+#plans input[type="text"] {
+  width: 460px;
+}
+#planner input[type="submit"] {
   display: inline-block;
   outline: none;
   cursor: pointer;
@@ -63,19 +61,19 @@ input.plan_submit {
   background: -moz-linear-gradient(top,  #64aadd,  #1b6eb0);
   filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#64aadd', endColorstr='#1b6eb0');
 }
-input.plan_submit:hover {
+#planner input[type="submit"]:hover {
   background: #1b5b8e;
   background: -webkit-gradient(linear, left top, left bottom, from(#64aadd), to(#1b5b8e));
   background: -moz-linear-gradient(top,  #64aadd,  #1b5b8e);
   filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#64aadd', endColorstr='#1b5b8e');
 }
-input.plan_submit:active {
+#planner input[type="submit"]:active {
   color: #1b6eb0;
   background: -webkit-gradient(linear, left top, left bottom, from(1b5b8e), to(#64aadd));
   background: -moz-linear-gradient(top,  #1b5b8e,  #64aadd);
   filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#1b5b8e', endColorstr='#64aadd');
 }
-ul#planner_controls {
+#planner_controls {
   display: inline;
   font-size: 110%;
   text-shadow: 1px 1px 1px #333;
@@ -89,7 +87,7 @@ ul#planner_controls {
   background: linear-gradient(top, rgba(123,123,123,1) 0%,rgba(96,96,96,1) 100%); 
   box-shadow: 0pt 2px 1px rgba(0, 0, 0, 0.1);
 }
-ul#planner_controls li {
+#planner_controls li {
   display: inline;
   padding: 10px 20px;
   font-weight: bold;
