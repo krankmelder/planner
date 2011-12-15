@@ -12,6 +12,9 @@ $labels['unmark'] = 'Demarkeer';
 $labels['edit'] = 'Wijzig';
 $labels['delete'] = 'Verwijder';
 
+$labels['mark_done'] = 'Markeer als klaas';
+$labels['delete_plan'] = 'Verwijder plan';
+
 $labels['all'] = 'Alle';
 $labels['starred'] = 'Ster';
 $labels['today'] = 'Vandaag';

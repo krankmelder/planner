@@ -12,6 +12,9 @@ $labels['unmark'] = 'Unmark';
 $labels['edit'] = 'Edit';
 $labels['delete'] = 'Delete';
 
+$labels['mark_done'] = 'Mark as done';
+$labels['delete_plan'] = 'Delete plan';
+
 $labels['all'] = 'All';
 $labels['starred'] = 'Starred';
 $labels['today'] = 'Today';

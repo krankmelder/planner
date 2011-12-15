@@ -608,11 +608,11 @@ class planner extends rcube_plugin
       $html .= html::span('edit', $content);
       // finished plan
       if($done) {
-        $html .= html::a(array('class' => 'delete', 'title' => $this->getText('delete')), "");
+        $html .= html::a(array('class' => 'delete', 'title' => $this->getText('delete_plan')), "");
       }
       // not finished plan
       else {
-        $html .= html::a(array('class' => 'done', 'title' => $this->getText('done')), "");
+        $html .= html::a(array('class' => 'done', 'title' => $this->getText('mark_done')), "");
       }    
       // highlight today's and starred plans
       if(date('Ymd', $timestamp) === date('Ymd') || $plan['starred']) {
