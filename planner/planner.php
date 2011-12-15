@@ -53,7 +53,7 @@ class planner extends rcube_plugin
       $this->add_hook('preferences_list', array($this, 'preferences_list'));
       $this->add_hook('preferences_save', array($this, 'preferences_save'));
     }
-    else {
+    elseif($this->rc->task == 'planner') {
       // register actions
       $this->register_action('plugin.planner', array($this, 'startup'));
       $this->register_action('plugin.plan_init', array($this, 'plan_init'));
@@ -74,7 +74,7 @@ class planner extends rcube_plugin
       'name'    => 'planner',
       'class'   => 'button-planner',
       'label'   => 'planner.planner',
-      'href'    => './?_task=dummy&_action=plugin.planner',
+      'href'    => './?_task=planner&_action=plugin.planner',
       'id'      => 'planner_button'
       ), 'taskbar');
       
