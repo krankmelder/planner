@@ -362,8 +362,8 @@ class planner extends rcube_plugin
       }
 
       $html = html::tag('input', array('id' => 'plan_edit_raw', 'type' => 'text', 'value' => $raw));
-      $html .= html::tag('input', array('id' => 'planner_edit_save', 'type' => 'submit', 'value' => 'Save'));
-      $html .= html::tag('input', array('id' => 'planner_edit_cancel', 'type' => 'submit', 'value' => 'Cancel'));
+      $html .= html::tag('input', array('id' => 'planner_edit_save', 'type' => 'submit', 'value' => $this->gettext('save')));
+      $html .= html::tag('input', array('id' => 'planner_edit_cancel', 'type' => 'submit', 'value' => $this->gettext('cancel')));
       
       $response = array('id' => $id, 'html' => $html);
       $this->rc->output->command('plugin.plan_edit', $response);
