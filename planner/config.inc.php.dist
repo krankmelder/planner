@@ -9,4 +9,7 @@ $rcmail_config['list_todo_always'] = false;
 // show plan preview while composing
 $rcmail_config['preview_plan'] = true;
 
+// show contact birthdays in planner
+$rcmail_config['birthdays'] = true;
+
 ?>

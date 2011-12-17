@@ -189,6 +189,18 @@ span.edit {
   width: 650px;
   height: 20px;
 }
+span.birthday span.date {
+  background: url('images/sprite.png') no-repeat 0px -145px;
+  font-size: 18px;
+  padding-left: 20px;
+  position: relative;
+  top: 0px;
+}
+span.birthday span.datetime {
+  font-size: 18px;
+  position: relative;
+  left: 10px;
+}
 a.star {
   float: left;
   background: url('images/sprite.png') no-repeat 0px -25px;

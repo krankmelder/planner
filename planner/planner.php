@@ -101,10 +101,10 @@ class planner extends rcube_plugin
   }
   
   /**
-   * Send plugin confiuration and list count to client
+   * Send plugin confiuration to client
    */
   function plan_init() {
-    if (!empty($this->user)) {
+    if(!empty($this->user)) {
       // send configuration to client
       $config = array();
       $config['default_list'] = (string)$this->rc->config->get('default_list', "all");
@@ -118,7 +118,7 @@ class planner extends rcube_plugin
    * Create new plan
    */
   function plan_new() {
-    if (!empty($this->user)) {
+    if(!empty($this->user)) {
       $raw = get_input_value('_p', RCUBE_INPUT_POST);
       $formatted = $this->rawToFormatted($raw);
 
@@ -144,7 +144,7 @@ class planner extends rcube_plugin
    * Mark plan done
    */
   function plan_done() {
-    if (!empty($this->user)) {
+    if(!empty($this->user)) {
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
       $query = $this->rc->db->query(
@@ -158,7 +158,7 @@ class planner extends rcube_plugin
    * Mark plan starred
    */
   function plan_star() {
-    if (!empty($this->user)) {
+    if(!empty($this->user)) {
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
       $query = $this->rc->db->query(
@@ -173,7 +173,7 @@ class planner extends rcube_plugin
    * Unmark starred plan
    */
   function plan_unstar() {
-    if (!empty($this->user)) {
+    if(!empty($this->user)) {
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
       $query = $this->rc->db->query(
@@ -188,7 +188,7 @@ class planner extends rcube_plugin
    * Edit a plan
    */
   function plan_edit() {
-    if (!empty($this->user)) {
+    if(!empty($this->user)) {
       $id = get_input_value('_id', RCUBE_INPUT_POST);
       $raw = get_input_value('_p', RCUBE_INPUT_POST);
 
@@ -214,7 +214,7 @@ class planner extends rcube_plugin
    * Delete a plan
    */
   function plan_delete() {
-    if (!empty($this->user)) {
+    if(!empty($this->user)) {
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
       $query = $this->rc->db->query(
@@ -228,7 +228,8 @@ class planner extends rcube_plugin
    * Retrieve plans and output as html
    */
   function plan_retrieve() {
-    if (!empty($this->user)) {
+    if(!empty($this->user)) {
+      $type = get_input_value('_p', RCUBE_INPUT_POST);
       $done = false;
       
       // show todo's always when true or only in all, starred and done
@@ -236,7 +237,7 @@ class planner extends rcube_plugin
       if($this->rc->config->get('list_todo_always')) {
         $todo = " OR datetime IS NULL";
       }
-      switch(get_input_value('_p', RCUBE_INPUT_POST)) {
+      switch($type) {
         // retrieve all
         case "all":
           $result = $this->rc->db->query("SELECT * FROM planner
@@ -296,8 +297,47 @@ class planner extends rcube_plugin
           break;
       }
       
+      // build plans array
+      $plans = array();
+      while ($result && ($plan = $this->rc->db->fetch_assoc($result))) {
+        if(!empty($plan['datetime'])) {
+          $timestamp = $this->toUserTime(strtotime($plan['datetime']));
+          $plans[$plan['id']] = array('timestamp' => $timestamp, 'text' => $plan['text'], 'starred' => $plan['starred']);
+        }
+        else {
+          $plans[$plan['id']] = array('timestamp' => 0, 'text' => $plan['text'], 'starred' => $plan['starred']);
+        }
+      }
+
+      // merge plans with birthdays
+      if($this->rc->config->get('birthdays', true)) {
+        foreach($this->getBirthdays() as $id => $birthday) {
+          if($type == 'all') {
+            $plans[] = $birthday;
+          }
+          // birthday is today!
+          if(date('z') == date('z', $birthday['timestamp']) && $type == 'today') {
+            $plans[] = $birthday;
+          }
+          // birthday is tomorrow
+          if(date('z')+1 == date('z', $birthday['timestamp']) && $type == 'tomorrow') {
+            $plans[] = $birthday;
+          }
+          // birthday is this week
+          if(date('W') == date('W', $birthday['timestamp']) && $type == 'week') {
+            $plans[] = $birthday;
+          }
+        }
+        function comparePlans($a, $b) {
+          if($a["timestamp"] == $b["timestamp"])
+            return 0;
+          return ($a["timestamp"] < $b["timestamp"]) ? -1 : 1;
+        }
+        uasort($plans, "comparePlans");
+      }
+
       // send plans to client
-      $this->rc->output->command('plugin.plan_retrieve', $this->html($result, $done));
+      $this->rc->output->command('plugin.plan_retrieve', $this->html($plans, $done));
     }
   }
 
@@ -337,7 +377,26 @@ class planner extends rcube_plugin
                                   WHERE user_id=? AND done =? AND deleted =? AND (WEEK(datetime) = WEEK(NOW())". $todo . ")",
                                   $this->rc->user->ID, 0, 0
                                  );
-    $counts['week'] = $this->rc->db->num_rows($week);      
+    $counts['week'] = $this->rc->db->num_rows($week);    
+    
+    // merge plans with birthdays
+    if($this->rc->config->get('birthdays', true)) {
+      foreach($this->getBirthdays() as $id => $birthday) {
+        $counts['all']++;
+        // birthday is today!
+        if(date('z') == date('z', $birthday['timestamp'])) {
+          $counts['today']++;
+        }
+        // birthday is tomorrow
+        if(date('z')+1 == date('z', $birthday['timestamp'])) {
+          $counts['tomorrow']++;
+        }
+        // birthday is this week
+        if(date('W') == date('W', $birthday['timestamp'])) {
+          $counts['week']++;
+        }
+      }
+    }  
 
     $this->rc->output->command('plugin.plan_counts', $counts);
   }
@@ -346,7 +405,7 @@ class planner extends rcube_plugin
    * Retrieve a plan in raw format for editing
    */
   function plan_raw() {
-    if (!empty($this->user)) {
+    if(!empty($this->user)) {
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
       $result = $this->rc->db->query("SELECT * FROM planner
@@ -361,7 +420,7 @@ class planner extends rcube_plugin
         $raw = date('d/m/Y H:i', $this->toUserTime(strtotime($plan['datetime']))) . " " . $plan['text'];
       }
 
-      $html = html::tag('input', array('id' => 'plan_edit_raw', 'type' => 'text', 'value' => $raw));
+      $html  = html::tag('input', array('id' => 'plan_edit_raw', 'type' => 'text', 'value' => $raw));
       $html .= html::tag('input', array('id' => 'planner_edit_save', 'type' => 'submit', 'value' => $this->gettext('save')));
       $html .= html::tag('input', array('id' => 'planner_edit_cancel', 'type' => 'submit', 'value' => $this->gettext('cancel')));
       
@@ -374,7 +433,7 @@ class planner extends rcube_plugin
    * Create a plan preview from raw input
    */
   function plan_preview() {
-    if (!empty($this->user)) {
+    if(!empty($this->user)) {
       $raw = get_input_value('_p', RCUBE_INPUT_POST);
 
       // format raw input
@@ -425,7 +484,7 @@ class planner extends rcube_plugin
    * @return array Modified parameters
    */
   function preferences_list($p) {
-    if ($p['section'] == 'plannersettings') {
+    if($p['section'] == 'plannersettings') {
       $p['blocks']['planner']['name'] = $this->gettext('mainoptions');
    
       $default_list = $this->rc->config->get('default_list', "all");
@@ -469,7 +528,7 @@ class planner extends rcube_plugin
    * @return array Modified parameters
    */
   function preferences_save($p) {
-    if ($p['section'] == 'plannersettings') {
+    if($p['section'] == 'plannersettings') {
       $p['prefs']['default_list'] = get_input_value('_default_list', RCUBE_INPUT_POST);
       $p['prefs']['list_todo_always'] = get_input_value('_list_todo_always', RCUBE_INPUT_POST) ? true : false;
       $p['prefs']['preview_plan'] = get_input_value('_preview_plan', RCUBE_INPUT_POST) ? true : false;
@@ -585,52 +644,102 @@ class planner extends rcube_plugin
    * @param  done      Is plan done?
    * @return string    Formatted planner as html
    */
-  private function html($result, $done) {
+  private function html($plans, $done) {
     // loop over all plans retrieved
-    $plans = "";
-    while ($result && ($plan = $this->rc->db->fetch_assoc($result))) {
-      $timestamp = $this->toUserTime(strtotime($plan['datetime']));
+    $items = "";
+    foreach ($plans as $id => $plan) {
+    
       $html = "";
       // starred plan
-      if($plan['starred']) {
-        $html .= html::a(array('class' => 'star', 'title' => $this->getText('unmark')), "");
+      if(isset($plan['starred'])) {
+        if($plan['starred']) {
+          $html .= html::a(array('class' => 'star', 'title' => $this->getText('unmark')), "");
+        }
+        else {
+          $html .= html::a(array('class' => 'nostar', 'title' => $this->getText('mark')), "");
+        }
       }
-      else {
-        $html .= html::a(array('class' => 'nostar', 'title' => $this->getText('mark')), "");
+
+      $content = "";
+      // birthday
+      if(!isset($plan['starred'])) {
+        $content .= html::span('date', date('d M', $plan['timestamp']));
+        $content .= html::span('datetime', $this->getText('birthday') . " " . $plan['text']);
       }
       // plan with date/time
-      $content = "";
-      if(!empty($plan['datetime'])) {
-        $content .= html::span('date', date('d M', $timestamp));
-        $content .= html::span('time', date('H:i', $timestamp));
+      elseif(!empty($plan['timestamp'])) {
+        $content .= html::span('date', date('d M', $plan['timestamp']));
+        $content .= html::span('time', date('H:i', $plan['timestamp']));
         $content .= html::span('datetime', $plan['text']);
       }
       // plan without date/time
       else {
         $content .= html::span('nodate', $plan['text']);
       }
-      $html .= html::span('edit', $content);
+      
+      if(!isset($plan['starred'])) {
+        $html .= html::span('birthday', $content);        
+      }
+      else {
+        $html .= html::span('edit', $content);
+      }
       // finished plan
       if($done) {
         $html .= html::a(array('class' => 'delete', 'title' => $this->getText('delete_plan')), "");
       }
       // not finished plan
-      else {
+      elseif(isset($plan['starred'])) {
         $html .= html::a(array('class' => 'done', 'title' => $this->getText('mark_done')), "");
       }    
       // highlight today's and starred plans
-      if(date('Ymd', $timestamp) === date('Ymd') || $plan['starred']) {
-       $plans .= html::tag('li', array('id' => $plan['id'], 'class' => 'highlight'), $html);
+      if(date('Ymd', $plan['timestamp']) === date('Ymd') || !isset($plan['starred']) ||$plan['starred']) {
+       $items .= html::tag('li', array('id' => $id, 'class' => 'highlight'), $html);
       }
       else {
-       $plans .= html::tag('li', array('id' => $plan['id']), $html);
+       $items .= html::tag('li', array('id' => $id), $html);
       }
     }
-    $list = html::tag('ul', array(), $plans);
+    $list = html::tag('ul', array(), $items);
 
     return $list;
   }
-  
+   
+  /**
+   * Retrieve contact birthdays
+   *
+   * @return array Contact birthdays
+   */
+  private function getBirthdays() { 
+    $birthdays = array();  
+    // get all contact records
+    $contacts = new rcube_contacts($this->rc->db ,$this->user);
+	  $contacts->set_page(1);
+	  $contacts->set_pagesize(9999);	
+
+    // get records
+	  $records = $contacts->list_records(array('vcard', true));
+
+    // loop over all contact records
+    while($record = $records->next()) {
+      $vcard = new rcube_vcard($record['vcard']);
+      $r = $vcard->get_assoc();
+      if(!empty($r['name']) && !empty($r['birthday'])) {
+        list($year, $month, $day) = split('-', (string) $r['birthday'][0]);
+        if($month < date('m')) {
+          $timestamp = mktime(0, 0, 0, $month, $day, date('Y') + 1);
+        }
+        else {
+          $timestamp = mktime(0, 0, 0, $month, $day); 
+        }
+        if($timestamp >= mktime(0,0,0, date('m'), date('d')) && $timestamp < mktime(0,0,0, date('m') + 1, date('d'))) {
+          $birthdays[] = array('timestamp' => $timestamp, 'text' => $r['name']);
+        }
+      }
+    }
+    
+    return $birthdays;
+  }
+   
   /**
    * Correct GMT timestamp with timezone to user timestamp
    *
@@ -659,7 +768,7 @@ class planner extends rcube_plugin
    private function getTimzoneOffset() {
   // get timezone provided by the user
   $timezone = 0;
-    if ($this->rc->config->get('timezone') === "auto") {
+    if($this->rc->config->get('timezone') === "auto") {
       $timezone = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : date('Z')/3600;
     } else {
       $timezone = $this->rc->config->get('timezone');

@@ -1,4 +1,4 @@
-  /*
+/*
  * Roundcube Planner
  * @version @package_version@
  * @author Lazlo Westerhof
