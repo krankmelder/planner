@@ -218,8 +218,8 @@ class planner extends rcube_plugin
       $id = get_input_value('_id', RCUBE_INPUT_POST);
 
       $query = $this->rc->db->query(
-        "UPDATE planner SET deleted=? WHERE id=? AND user_id=?",
-        1, $id, $this->user
+        "DELETE FROM planner WHERE id=? AND user_id=?",
+        $id, $this->user
       );
     }
   }
@@ -241,58 +241,58 @@ class planner extends rcube_plugin
         // retrieve all
         case "all":
           $result = $this->rc->db->query("SELECT * FROM planner
-                                          WHERE user_id=? AND done =? AND deleted =?
+                                          WHERE user_id=? AND done =?
                                           ORDER BY `datetime` ASC",
-                                          $this->rc->user->ID, 0, 0
+                                          $this->rc->user->ID, 0
                                          );
           break;
         // retrieve starred
         case "starred":
           $result = $this->rc->db->query("SELECT * FROM planner
-                                          WHERE user_id=? AND done =? AND deleted =? AND starred =?
+                                          WHERE user_id=? AND done =? AND starred =?
                                           ORDER BY `datetime` ASC",
-                                          $this->rc->user->ID, 0, 0, 1
+                                          $this->rc->user->ID, 0, 1
                                          );
           break;
         // retrieve today's
         case "today":
           $result = $this->rc->db->query("SELECT * FROM planner
-                                          WHERE user_id=? AND done =? AND deleted =? AND (DATE(datetime) = DATE(NOW())". $todo . ")
+                                          WHERE user_id=? AND done =? AND (DATE(datetime) = DATE(NOW())". $todo . ")
                                           ORDER BY `datetime` ASC",
-                                          $this->rc->user->ID, 0, 0
+                                          $this->rc->user->ID, 0
                                          );
           break;
         // retrieve tomorrow's
         case "tomorrow":
           $result = $this->rc->db->query("SELECT * FROM planner
-                                          WHERE user_id=? AND done =? AND deleted =? AND (TO_DAYS(datetime) = TO_DAYS(NOW())+1". $todo . ")
+                                          WHERE user_id=? AND done =? AND (TO_DAYS(datetime) = TO_DAYS(NOW())+1". $todo . ")
                                           ORDER BY `datetime` ASC",
-                                          $this->rc->user->ID, 0, 0
+                                          $this->rc->user->ID, 0
                                          );
           break;
         // retrieve this week
         case "week":
           $result = $this->rc->db->query("SELECT * FROM planner
-                                          WHERE user_id=? AND done =? AND deleted =? AND (WEEK(datetime) = WEEK(NOW())". $todo . ")
+                                          WHERE user_id=? AND done =? AND (WEEK(datetime) = WEEK(NOW())". $todo . ")
                                           ORDER BY `datetime` ASC",
-                                          $this->rc->user->ID, 0, 0
+                                          $this->rc->user->ID, 0
                                          );
           break;
         // retrieve done
         case "done":
           $result = $this->rc->db->query("SELECT * FROM planner
-                                          WHERE user_id=? AND deleted =? AND done =?
+                                          WHERE user_id=? AND done =?
                                           ORDER BY `datetime` ASC",
-                                          $this->rc->user->ID, 0, 1
+                                          $this->rc->user->ID, 1
                                          );
           $done = true;
           break;
         // retrieve all
         default:
           $result = $this->rc->db->query("SELECT * FROM planner
-                                          WHERE user_id=? AND deleted =?
+                                          WHERE user_id=?
                                           ORDER BY `datetime` ASC",
-                                          $this->rc->user->ID, 0
+                                          $this->rc->user->ID
                                          );
           break;
       }
@@ -354,28 +354,28 @@ class planner extends rcube_plugin
     // retrieve all the list counts
     $counts= array();
     $all = $this->rc->db->query("SELECT id FROM planner
-                                 WHERE user_id=? AND done =? AND deleted =?",
-                                 $this->rc->user->ID, 0, 0
+                                 WHERE user_id=? AND done =?",
+                                 $this->rc->user->ID, 0
                                 );
     $counts['all'] = $this->rc->db->num_rows($all);
     $starred = $this->rc->db->query("SELECT id FROM planner
-                                     WHERE user_id=? AND done =? AND deleted =? AND starred =?",
-                                     $this->rc->user->ID, 0, 0, 1
+                                     WHERE user_id=? AND done =? AND starred =?",
+                                     $this->rc->user->ID, 0, 1
                                     );
     $counts['starred'] = $this->rc->db->num_rows($starred);
     $today = $this->rc->db->query("SELECT id FROM planner
-                                   WHERE user_id=? AND done =? AND deleted =? AND (DATE(datetime) = DATE(NOW())". $todo . ")",
-                                   $this->rc->user->ID, 0, 0
+                                   WHERE user_id=? AND done =? AND (DATE(datetime) = DATE(NOW())". $todo . ")",
+                                   $this->rc->user->ID, 0
                                   );
     $counts['today'] = $this->rc->db->num_rows($today);
     $tomorrow = $this->rc->db->query("SELECT id FROM planner
-                                      WHERE user_id=? AND done =? AND deleted =? AND (TO_DAYS(datetime) = TO_DAYS(NOW())+1". $todo . ")",
-                                      $this->rc->user->ID, 0, 0
+                                      WHERE user_id=? AND done =? AND (TO_DAYS(datetime) = TO_DAYS(NOW())+1". $todo . ")",
+                                      $this->rc->user->ID, 0
                                      );
     $counts['tomorrow'] = $this->rc->db->num_rows($tomorrow);
     $week = $this->rc->db->query("SELECT id FROM planner
-                                  WHERE user_id=? AND done =? AND deleted =? AND (WEEK(datetime) = WEEK(NOW())". $todo . ")",
-                                  $this->rc->user->ID, 0, 0
+                                  WHERE user_id=? AND done =? AND (WEEK(datetime) = WEEK(NOW())". $todo . ")",
+                                  $this->rc->user->ID, 0
                                  );
     $counts['week'] = $this->rc->db->num_rows($week);    
     
@@ -410,7 +410,7 @@ class planner extends rcube_plugin
 
       $result = $this->rc->db->query("SELECT * FROM planner
                                       WHERE id=? AND user_id=?",
-                                      $id, $this->rc->user->ID, 0, 0
+                                      $id, $this->rc->user->ID
                                      );
                                      
       $plan = $this->rc->db->fetch_assoc($result);

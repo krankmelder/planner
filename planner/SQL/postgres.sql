@@ -18,8 +18,7 @@ CREATE TABLE planner (
     "starred" smallint NOT NULL DEFAULT 0,
     "datetime" timestamp with time zone DEFAULT NULL,
     "text" text NOT NULL,
-    "done" smallint NOT NULL DEFAULT 0,
-    "deleted" smallint NOT NULL DEFAULT 0
+    "done" smallint NOT NULL DEFAULT 0
 );
     
 ALTER TABLE ONLY planner
