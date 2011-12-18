@@ -516,6 +516,14 @@ class planner extends rcube_plugin
         'title' => html::label($field_id, Q($this->gettext('preview_plan'))),
         'content' => $checkbox->show($preview?1:0),
       );
+      
+      $birthdays = $this->rc->config->get('birthdays', true);
+      $field_id = 'rcmfd_birthdays';
+      $checkbox = new html_checkbox(array('name' => '_birthdays', 'id' => $field_id, 'value' => 1));
+      $p['blocks']['planner']['options']['birthdays'] = array(
+        'title' => html::label($field_id, Q($this->gettext('show_birthdays'))),
+        'content' => $checkbox->show($birthdays?1:0),
+      );
     } 
     return $p;
   }
@@ -532,6 +540,7 @@ class planner extends rcube_plugin
       $p['prefs']['default_list'] = get_input_value('_default_list', RCUBE_INPUT_POST);
       $p['prefs']['list_todo_always'] = get_input_value('_list_todo_always', RCUBE_INPUT_POST) ? true : false;
       $p['prefs']['preview_plan'] = get_input_value('_preview_plan', RCUBE_INPUT_POST) ? true : false;
+      $p['prefs']['birthdays'] = get_input_value('_birthdays', RCUBE_INPUT_POST) ? true : false;
     }
     
     return $p;
