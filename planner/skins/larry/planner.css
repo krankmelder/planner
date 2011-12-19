@@ -1,0 +1,235 @@
+/*
+ * Roundcube Planner
+ */
+#taskbar a.button-planner {
+  display: inline-block;
+  font-size: 110%;
+  font-weight: normal;
+  text-shadow: 1px 1px 1px black;
+  background: url('images/planner.png') 0px 8px no-repeat;
+  padding-left: 34px;
+}
+#taskbar a.button-planner:hover {
+  background-position: 0px -36px;
+  text-decoration: none;
+}
+#planner {
+  color: #dddddd;
+  margin: 0 auto;
+  width: 800px;
+}
+#planner a {
+  color: #dddddd;
+  text-decoration: none;
+}
+#planner a:hover, #planner .active {
+  color: #ffffff;
+}
+#planner_input {
+  height: 55px;
+}
+#planner input[type="text"] {
+  width: 630px;
+  height: 32px;
+  padding: 0 4px;
+  border: 1px solid #b2b2b2;
+  border-radius: 3px;
+  box-shadow: 0 0 2px 1px rgba(0,0,0, 0.1);
+}
+#planner input[type="text"]:focus {
+  border-color: #127fbe;
+}
+#plans input {
+  position: relative;
+  top: -7px;
+}
+#plans input[type="text"] {
+  width: 460px;
+}
+#planner input[type="submit"] {
+  display: inline-block;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  font: 14px/100% 'Open Sans', sans-serif;
+  padding: 0.35em 1.5em 0.45em;
+  text-shadow: 0 1px 1px rgba(0,0,0,.3);
+  -webkit-border-radius: .3em; 
+  -moz-border-radius: .3em;
+  border-radius: .3em;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  color: #ffffff !important;
+  border: solid 1px #b9b9b9;
+  background: #64aadd;
+  background: -webkit-gradient(linear, left top, left bottom, from(#64aadd), to(#1b6eb0));
+  background: -moz-linear-gradient(top,  #64aadd,  #1b6eb0);
+  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#64aadd', endColorstr='#1b6eb0');
+}
+#planner input[type="submit"]:hover {
+  background: #1b5b8e;
+  background: -webkit-gradient(linear, left top, left bottom, from(#64aadd), to(#1b5b8e));
+  background: -moz-linear-gradient(top,  #64aadd,  #1b5b8e);
+  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#64aadd', endColorstr='#1b5b8e');
+}
+#planner input[type="submit"]:active {
+  color: #1b6eb0;
+  background: -webkit-gradient(linear, left top, left bottom, from(1b5b8e), to(#64aadd));
+  background: -moz-linear-gradient(top,  #1b5b8e,  #64aadd);
+  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#1b5b8e', endColorstr='#64aadd');
+}
+#planner_controls {
+  display: inline;
+  font-size: 110%;
+  text-shadow: 1px 1px 1px #333;
+  padding: 7px 14px;
+  border-radius: 5px;
+  background: #7a7b7d;
+  background: -moz-linear-gradient(top, rgba(123,123,123,1) 0%, rgba(96,96,96,1) 100%); 
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(123,123,123,1)), color-stop(100%,rgba(96,96,96,1))); 
+  background: -o-linear-gradient(top, rgba(123,123,123,1) 0%,rgba(96,96,96,1) 100%); 
+  background: -ms-linear-gradient(top, rgba(123,123,123,1) 0%,rgba(96,96,96,1) 100%);
+  background: linear-gradient(top, rgba(123,123,123,1) 0%,rgba(96,96,96,1) 100%); 
+  box-shadow: 0pt 2px 1px rgba(0, 0, 0, 0.1);
+}
+#planner_controls li {
+  display: inline;
+  padding: 10px 20px;
+  font-weight: bold;
+}
+span.count {
+  position: relative;
+  bottom: 1px;
+  font-size: 10px;
+  min-width: 12px;
+  background-color: #cc3333;
+  color: #ffffff;
+  padding: 0 3px;
+  text-shadow: #444444;
+  border-radius: 8px;
+  box-shadow: 0pt 1px 3px rgba(0, 0, 0, 0.25);
+}
+#planner_help {
+  display: none;
+  width: 600px;
+  color: #222;
+  font-size: 11px;
+}
+#plan_preview {
+  display: none;
+  position: relative;
+  top: 12px;
+  color: #222;
+  list-style: none;
+  height: 20px;
+  line-height: 20px;
+  padding: 10px;
+  margin: 3px;
+  font-size: 17px;
+  background: #dfdfdf;
+  width: 700px;
+  border-radius: 5px 5px;
+}
+#badge {
+  position: absolute;
+  top: -6px;
+  right: 10px;
+  font-size: 11px;
+  min-width: 12px;
+  background-color: #cc3333;
+  color: white;
+  letter-spacing: -0.5px;
+  padding: 0 5px;
+  line-height: 17px;
+  text-shadow: #444444;
+  border-radius: 5px;
+  box-shadow: 0pt 1px 3px rgba(0, 0, 0, 0.25);
+}
+#plans ul {
+  margin: 20px 0;
+  padding: 0;
+}
+#plans li {
+  display: block;
+  color: #222;
+  list-style: none;
+  height: 20px;
+  line-height: 20px;
+  padding: 10px;
+  margin: 3px;
+  font-size: 17px;
+  background: #dfdfdf;
+  width: 700px;
+  border-radius: 5px;
+}
+#plans li.highlight {
+  background: #efefef;
+}
+#plans li a {
+  display: block;
+  width: 15px;
+  height: 15px; 
+  margin-top: 2px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+span.date {
+  font-size: 18px;
+  position: relative;
+  left: 0px;
+  top: -9px;
+}
+span.time {
+  position: relative;
+  left: -45px;
+  top: 6px;
+  font-size: 14px;
+}
+span.datetime {
+  position: relative;
+  left: -30px;
+}
+span.edit {
+  display: inline-block;
+  width: 650px;
+  height: 20px;
+}
+span.birthday span.date {
+  background: url('images/sprite.png') no-repeat 0px -145px;
+  font-size: 18px;
+  padding-left: 20px;
+  position: relative;
+  top: 0px;
+}
+span.birthday span.datetime {
+  font-size: 18px;
+  position: relative;
+  left: 10px;
+}
+a.star {
+  float: left;
+  background: url('images/sprite.png') no-repeat 0px -25px;
+}
+a.nostar {
+  float: left;
+  background: url('images/sprite.png') no-repeat;
+}
+a.nostar:hover {
+  background-position: 0px -25px;
+}
+a.delete {
+  float: right;
+  background: url('images/sprite.png') no-repeat 0px -125px;
+}
+a.delete:hover {
+  background-position: 0px -100px;
+}
+a.done { 
+  float: right;
+  background: url('images/sprite.png') no-repeat 0px -75px;
+}
+a.done:hover {
+  background-position: 0px -50px;
+}
