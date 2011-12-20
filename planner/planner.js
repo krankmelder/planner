@@ -51,8 +51,9 @@ $(document).ready(function() {
 
   // listeners
   // use .on() for jQuery 1.7+
-  $('#planner_submit').click(function() {
+  $('#planner_submit').click(function(e) {
     if($('#planner_raw').val() != "") {
+      e.preventDefault();
       rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
       $('#planner_raw').val("");
       // increase listcount by 1
@@ -61,13 +62,13 @@ $(document).ready(function() {
       // remove preview
       $('#plan_preview').html("");
       $('#plan_preview').hide();
-      return false;
     }
   });
   $('#planner_raw').keypress(function(e){
     if($('#planner_raw').val() != "") {
       var keycode = (e.keyCode ? e.keyCode : e.which);
       if(keycode == '13'){
+        e.preventDefault();
         rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
         $('#planner_raw').val("");
         // increase listcount by 1
@@ -76,7 +77,6 @@ $(document).ready(function() {
         // remove preview
         $('#plan_preview').html("");
         $('#plan_preview').hide();
-        return false;
       }
     }
   });
