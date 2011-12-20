@@ -29,8 +29,7 @@ $(document).ready(function () {
   });
   rcmail.addEventListener('plugin.plan_preview', function (response) {
     if (preview) {
-      $('#plan_preview').html(response);
-      $('#plan_preview').show();
+      $('#plan_preview').html(response).show();
     }
   });
   rcmail.addEventListener('plugin.plan_edit', function (response) {
@@ -62,14 +61,13 @@ $(document).ready(function () {
       var count = parseInt($('#' + list + ' span.count').text(), 10) + 1;
       $('#' + list + ' span.count').html(count);
       // remove preview
-      $('#plan_preview').html("");
-      $('#plan_preview').hide();
+      $('#plan_preview').html("").hide();
     }
   });
   $('#planner_raw').keypress(function (e) {
     if ($('#planner_raw').val() !== "") {
-      var keycode = e.keyCode ? e.keyCode : e.which;
-      if (keycode === '13') {
+      var keycode = (e.keyCode ? e.keyCode : e.which);
+      if (keycode == '13') {
         e.preventDefault();
         rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));
         $('#planner_raw').val("");
@@ -77,8 +75,7 @@ $(document).ready(function () {
         var count = parseInt($('#' + list + ' span.count').text(), 10) + 1;
         $('#' + list + ' span.count').html(count);
         // remove preview
-        $('#plan_preview').html("");
-        $('#plan_preview').hide();
+        $('#plan_preview').html("").hide();
       }
     }
   });
@@ -88,15 +85,13 @@ $(document).ready(function () {
       rcmail.http_post('plugin.plan_preview', '_p=' + encodeURIComponent($('#planner_raw').val()));
     } else {
       // remove preview
-      $('#plan_preview').html("");
-      $('#plan_preview').hide();
+      $('#plan_preview').html("").hide();
     }
   });
   $('#planner_raw').focusout(function () {
     if (!$('#planner_raw').val()) {
       // remove preview
-      $('#plan_preview').html("");
-      $('#plan_preview').hide();
+      $('#plan_preview').html("").hide();
     }
   });
 
