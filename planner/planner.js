@@ -81,8 +81,14 @@ $(document).ready(function() {
     }
   });
   $('#planner_raw').keyup(function() {
-    if(preview) {
+    if(preview && $('#planner_raw').val()) {
+      // load preview
       rcmail.http_post('plugin.plan_preview', '_p=' + encodeURIComponent($('#planner_raw').val()));
+    } 
+    else {
+      // remove preview
+      $('#plan_preview').html("");
+      $('#plan_preview').hide();     
     }
   });
   $('#planner_raw').focusout(function() {
