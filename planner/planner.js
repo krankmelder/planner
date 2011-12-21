@@ -66,7 +66,7 @@ $(document).ready(function () {
   });
   $('#planner_raw').keypress(function (e) {
     if ($('#planner_raw').val() !== "") {
-      var keycode = (e.keyCode ? e.keyCode : e.which);
+      var keycode = e.keyCode ? e.keyCode : e.which;
       if (keycode == '13') {
         e.preventDefault();
         rcmail.http_post('plugin.plan_new', '_p=' + encodeURIComponent($('#planner_raw').val()));

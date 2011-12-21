@@ -733,7 +733,7 @@ class planner extends rcube_plugin
       $vcard = new rcube_vcard($record['vcard']);
       $r = $vcard->get_assoc();
       if(!empty($r['name']) && !empty($r['birthday'])) {
-        list($year, $month, $day) = split('-', (string) $r['birthday'][0]);
+        list($year, $month, $day) = explode('-', (string) $r['birthday'][0]);
         if($month < date('m')) {
           $timestamp = mktime(0, 0, 0, $month, $day, date('Y') + 1);
         }
